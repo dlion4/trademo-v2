@@ -1,0 +1,744 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   tradeMO · Page H-3 — Pricing & Investor Fee Tiers (/pricing)
+   Scoped under .page-pricing
+   Light mode default, clean institutional trade terminal theme.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.page-pricing {
+  background: var(--canvas);
+}
+
+.page-pricing [data-reveal] {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.page-pricing [data-reveal].is-inview {
+  animation: fadeSlideUp var(--dur-slower) var(--ease-out) forwards;
+  animation-delay: var(--reveal-delay, 0ms);
+}
+
+/* ══════════════════ PRICING HERO ══════════════════ */
+
+.page-pricing .pr-hero {
+  padding-block: clamp(44px, 7vw, 88px) var(--space-7);
+  border-bottom: 1px solid var(--border);
+}
+
+.page-pricing .pr-hero__title {
+  font-size: clamp(2.05rem, 4.4vw, 3.3rem);
+  line-height: 1.08;
+  letter-spacing: -0.032em;
+  margin: var(--space-4) 0;
+  max-width: 24ch;
+}
+
+.page-pricing .pr-hero__sub {
+  max-width: 62ch;
+  font-size: 1.04rem;
+  line-height: 1.66;
+  color: var(--text-secondary);
+}
+
+.page-pricing .pr-hero__chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-5);
+}
+
+.page-pricing .pr-hero__kpis {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0;
+  margin-top: var(--space-7);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.page-pricing .pr-kpi {
+  padding: var(--space-4) var(--space-5);
+  border-right: 1px solid var(--border);
+}
+
+.page-pricing .pr-kpi:last-child {
+  border-right: 0;
+}
+
+.page-pricing .pr-kpi__value {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 680;
+  letter-spacing: -0.028em;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.page-pricing .pr-kpi__label {
+  font-size: 0.79rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+/* ══════════════════ TIER CARDS ══════════════════ */
+
+.page-pricing .tiers-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-4);
+  margin-top: var(--space-6);
+}
+
+.page-pricing .tier-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-6);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out),
+    border-color var(--dur-base) var(--ease-out);
+}
+
+.page-pricing .tier-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lift);
+  border-color: var(--border-strong);
+}
+
+.page-pricing .tier-card--popular {
+  border-color: var(--accent-border);
+  box-shadow: 0 0 0 1px var(--accent-border), var(--shadow-md);
+  background: linear-gradient(180deg, var(--surface), var(--surface-inset));
+}
+
+.page-pricing .tier-card__badge {
+  position: absolute;
+  top: calc(var(--space-3) * -1);
+  right: var(--space-5);
+}
+
+.page-pricing .tier-card__head {
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.page-pricing .tier-card__name {
+  font-size: 1.22rem;
+  font-weight: 680;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.page-pricing .tier-card__range {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.page-pricing .tier-card__desc {
+  font-size: 0.88rem;
+  line-height: 1.58;
+  color: var(--text-secondary);
+  margin-top: var(--space-2);
+  margin-bottom: 0;
+}
+
+.page-pricing .tier-card__rates {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+  padding: var(--space-3);
+  border-radius: var(--radius-md);
+  background: var(--surface-sunken);
+  border: 1px solid var(--border-subtle);
+}
+
+.page-pricing .tier-rate {
+  display: flex;
+  flex-direction: column;
+}
+
+.page-pricing .tier-rate__label {
+  font-size: 0.68rem;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.page-pricing .tier-rate__val {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+  margin-top: 2px;
+}
+
+.page-pricing .tier-rate__sub {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.page-pricing .tier-card__perks {
+  display: grid;
+  gap: var(--space-2);
+  margin: var(--space-5) 0 var(--space-6);
+  padding: 0;
+  list-style: none;
+}
+
+.page-pricing .tier-card__perks li {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  font-size: 0.87rem;
+  color: var(--text-secondary);
+}
+
+.page-pricing .tier-card__perks svg {
+  color: var(--win);
+  flex: none;
+  margin-top: 3px;
+}
+
+.page-pricing .tier-card__foot {
+  margin-top: auto;
+}
+
+/* ══════════════════ ADVANCED CALCULATOR ══════════════════ */
+
+.page-pricing .calc-section {
+  padding-block: var(--space-8);
+  border-top: 1px solid var(--border);
+  background: var(--canvas-alt);
+}
+
+.page-pricing .calc-panel {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+  background: var(--surface);
+  box-shadow: var(--shadow-md);
+  padding: clamp(24px, 4vw, 48px);
+}
+
+.page-pricing .calc-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: clamp(28px, 4vw, 56px);
+  align-items: start;
+}
+
+.page-pricing .calc-field {
+  margin-bottom: var(--space-5);
+}
+
+.page-pricing .calc-field__head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-2);
+}
+
+.page-pricing .calc-field__label {
+  font-size: 0.82rem;
+  font-weight: 650;
+  color: var(--text-primary);
+}
+
+.page-pricing .calc-field__display {
+  font-family: var(--font-mono);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.page-pricing .calc-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.page-pricing .calc-input-prefix {
+  position: absolute;
+  left: 14px;
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  pointer-events: none;
+}
+
+.page-pricing .calc-amount-input {
+  width: 100%;
+  padding: 0.65rem 1rem 0.65rem 2.2rem;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  font-family: var(--font-mono);
+  font-size: 1.1rem;
+  font-weight: 650;
+  color: var(--text-primary);
+  background: var(--surface);
+  outline: 0;
+  transition: border-color var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
+}
+
+.page-pricing .calc-amount-input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.12);
+}
+
+.page-pricing .calc-slider-track {
+  margin-top: var(--space-3);
+}
+
+.page-pricing .calc-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  margin-top: var(--space-2);
+}
+
+.page-pricing .calc-preset-btn {
+  padding: 0.22rem 0.55rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--dur-fast) var(--ease-out);
+}
+
+.page-pricing .calc-preset-btn:hover {
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+  background: var(--surface-sunken);
+}
+
+.page-pricing .calc-preset-btn.is-active {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+/* Asset Class Selector */
+.page-pricing .calc-pills-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+
+.page-pricing .calc-pill-card {
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  text-align: left;
+  cursor: pointer;
+  transition: all var(--dur-fast) var(--ease-out);
+}
+
+.page-pricing .calc-pill-card:hover {
+  border-color: var(--border-strong);
+}
+
+.page-pricing .calc-pill-card.is-active {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.page-pricing .calc-pill-card__name {
+  font-size: 0.82rem;
+  font-weight: 650;
+  color: var(--text-primary);
+}
+
+.page-pricing .calc-pill-card__sub {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.page-pricing .calc-pill-card__yield {
+  font-family: var(--font-mono);
+  font-size: 0.76rem;
+  font-weight: 600;
+  color: var(--win);
+  margin-top: 4px;
+}
+
+/* Duration Tabs */
+.page-pricing .calc-durations {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-sunken);
+}
+
+.page-pricing .calc-dur-btn {
+  padding: 0.45rem 0.2rem;
+  border: 0;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--dur-fast) var(--ease-out);
+}
+
+.page-pricing .calc-dur-btn.is-active {
+  background: var(--surface);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Result Box */
+.page-pricing .calc-result-box {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface-inset);
+  padding: var(--space-5);
+  box-shadow: var(--shadow-sm);
+}
+
+.page-pricing .calc-tier-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.28rem 0.7rem;
+  border-radius: var(--radius-sm);
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-border);
+  color: var(--accent);
+  font-size: 0.78rem;
+  font-weight: 650;
+  margin-bottom: var(--space-4);
+}
+
+.page-pricing .calc-summary-hero {
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--border);
+}
+
+.page-pricing .calc-summary-hero__label {
+  font-size: 0.78rem;
+  font-weight: 650;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.page-pricing .calc-summary-hero__val {
+  font-family: var(--font-display);
+  font-size: 2.2rem;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  color: var(--win);
+  font-variant-numeric: tabular-nums;
+  margin-top: 2px;
+}
+
+.page-pricing .calc-summary-hero__roi {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-family: var(--font-mono);
+  font-size: 0.88rem;
+  font-weight: 650;
+  color: var(--win);
+  margin-top: 4px;
+}
+
+.page-pricing .calc-breakdown-lines {
+  display: grid;
+  gap: 0;
+  margin-top: var(--space-4);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.page-pricing .calc-line {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: 0.65rem var(--space-3);
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: 0.84rem;
+}
+
+.page-pricing .calc-line:last-child {
+  border-bottom: 0;
+}
+
+.page-pricing .calc-line__k {
+  color: var(--text-secondary);
+}
+
+.page-pricing .calc-line__v {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.page-pricing .calc-line__v--fee {
+  color: var(--loss);
+}
+
+.page-pricing .calc-line--highlight {
+  background: var(--surface-2);
+}
+
+.page-pricing .calc-line--highlight .calc-line__k {
+  font-weight: 650;
+  color: var(--text-primary);
+}
+
+.page-pricing .calc-line--highlight .calc-line__v {
+  font-size: 0.95rem;
+  color: var(--text-primary);
+}
+
+.page-pricing .calc-cta-btn {
+  width: 100%;
+  margin-top: var(--space-4);
+}
+
+/* ══════════════════ HIGH WATER MARK BANNER ══════════════════ */
+
+.page-pricing .hwm-banner {
+  margin-block: var(--space-7);
+  padding: var(--space-5) var(--space-6);
+  border: 1px solid var(--accent-border);
+  border-radius: var(--radius-lg);
+  background: var(--accent-soft);
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+}
+
+.page-pricing .hwm-banner__icon {
+  display: grid;
+  place-items: center;
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  color: var(--accent);
+  border: 1px solid var(--accent-border);
+  flex: none;
+}
+
+.page-pricing .hwm-banner__title {
+  font-size: 1.05rem;
+  font-weight: 680;
+  color: var(--text-primary);
+  margin-bottom: 4px;
+}
+
+.page-pricing .hwm-banner__desc {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+/* ══════════════════ FEE MATRIX TABLE ══════════════════ */
+
+.page-pricing .fee-matrix {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  overflow: hidden;
+  margin-top: var(--space-6);
+}
+
+.page-pricing .fee-matrix__scroll {
+  overflow-x: auto;
+}
+
+.page-pricing .fee-matrix__table {
+  width: 100%;
+  min-width: 680px;
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 0.88rem;
+}
+
+.page-pricing .fee-matrix__table th {
+  padding: 0.8rem var(--space-4);
+  font-size: 0.72rem;
+  font-weight: 680;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+  text-align: left;
+}
+
+.page-pricing .fee-matrix__table th.th--popular {
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.page-pricing .fee-matrix__table td {
+  padding: 0.75rem var(--space-4);
+  border-bottom: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  vertical-align: middle;
+}
+
+.page-pricing .fee-matrix__table tr:last-child td {
+  border-bottom: 0;
+}
+
+.page-pricing .fee-matrix__table td.td--feature {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.page-pricing .fee-matrix__table td.td--popular {
+  background: rgba(15, 118, 110, 0.02);
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* ══════════════════ FAQ ACCORDION ══════════════════ */
+
+.page-pricing .faq-grid {
+  display: grid;
+  gap: var(--space-3);
+  max-width: 840px;
+  margin-inline: auto;
+  margin-top: var(--space-6);
+}
+
+.page-pricing .faq-item {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  overflow: hidden;
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+
+.page-pricing .faq-item:hover {
+  border-color: var(--border-strong);
+}
+
+.page-pricing .faq-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-4) var(--space-5);
+  font-size: 0.95rem;
+  font-weight: 640;
+  color: var(--text-primary);
+  cursor: pointer;
+  user-select: none;
+  list-style: none;
+}
+
+.page-pricing .faq-summary::-webkit-details-marker {
+  display: none;
+}
+
+.page-pricing .faq-summary svg {
+  color: var(--text-muted);
+  transition: transform var(--dur-fast) var(--ease-out);
+  flex: none;
+}
+
+.page-pricing .faq-item[open] .faq-summary svg {
+  transform: rotate(180deg);
+  color: var(--accent);
+}
+
+.page-pricing .faq-body {
+  padding: 0 var(--space-5) var(--space-5);
+  font-size: 0.9rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+
+/* ══════════════════ RESPONSIVE ══════════════════ */
+
+@media (max-width: 991.98px) {
+  .page-pricing .pr-hero__kpis {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .page-pricing .pr-kpi:nth-child(2n) {
+    border-right: 0;
+  }
+
+  .page-pricing .pr-kpi:nth-child(-n + 2) {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .page-pricing .tiers-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .page-pricing .calc-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .page-pricing .calc-pills-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .page-pricing .calc-durations {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 575.98px) {
+  .page-pricing .pr-hero__kpis {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .page-pricing .pr-kpi {
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .page-pricing .pr-kpi:last-child {
+    border-bottom: 0;
+  }
+
+  .page-pricing .hwm-banner {
+    flex-direction: column;
+  }
+
+  .page-pricing .calc-durations {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-pricing [data-reveal] {
+    opacity: 1;
+    transform: none;
+    animation: none !important;
+  }
+}
