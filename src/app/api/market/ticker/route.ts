@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { getTickerFeed } from "@/server/services/landing-service";
+import { LANDING_FALLBACK } from "@/lib/content/landing-content";
 import type { ApiEnvelope, TickerFeedDTO } from "@/lib/api/types";
 
 export const dynamic = "force-dynamic";
@@ -12,7 +12,7 @@ export const dynamic = "force-dynamic";
  * keeping the same response shape.
  */
 export async function GET() {
-  const { quotes, meta } = await getTickerFeed();
+  const { ticker: quotes, meta } = LANDING_FALLBACK;
 
   const body: ApiEnvelope<TickerFeedDTO> = {
     data: { quotes, meta },

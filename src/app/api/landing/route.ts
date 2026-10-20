@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { getLandingContent } from "@/server/services/landing-service";
+import { LANDING_FALLBACK } from "@/lib/content/landing-content";
 import type { ApiEnvelope, LandingContentDTO } from "@/lib/api/types";
 
 export const dynamic = "force-dynamic";
@@ -11,13 +11,10 @@ export const dynamic = "force-dynamic";
  * frontend is switched to a remote backend.
  */
 export async function GET() {
-  const { content, usedFallback } = await getLandingContent();
-
   const body: ApiEnvelope<LandingContentDTO> = {
-    data: content,
+    data: LANDING_FALLBACK,
     meta: {
-      ...content.meta,
-      source: usedFallback ? "fallback" : "database",
+      ...LANDING_FALLBACK.meta,
       requestId: `landing_${Date.now().toString(36)}`,
     },
   };

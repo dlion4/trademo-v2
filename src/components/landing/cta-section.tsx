@@ -1,13 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useMutation } from "@tanstack/react-query";
 import { useState, type FormEvent } from "react";
 
 import { Icon } from "@/components/icons";
 import { Reveal } from "@/components/landing/reveal";
-import { submitWaitlistSignup } from "@/lib/api/landing";
-import { ApiError } from "@/lib/api/http";
 import type { CtaSectionPayloadDTO } from "@/lib/api/types";
 
 interface CtaSectionProps {
@@ -18,21 +15,12 @@ interface CtaSectionProps {
 export function CtaSection({ eyebrow, payload }: CtaSectionProps) {
   const [email, setEmail] = useState("");
   const [role, setRole] = useState<"operator" | "investor">("investor");
-
-  const mutation = useMutation({
-    mutationFn: submitWaitlistSignup,
-  });
+  const [feedback, setFeedback] = useState<string | null>(null);
 
   const onSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    mutation.mutate({ email, role, source: "landing-cta" });
+    setFeedback("Waitlist signup is unavailable while backend integration is disabled.");
   };
-
-  const feedback = mutation.isError
-    ? { tone: "err", text: mutation.error instanceof ApiError ? mutation.error.message : "Something went wrong." }
-    : mutation.isSuccess
-      ? { tone: "ok", text: mutation.data.message }
-      : null;
 
   return (
     <section className="section-shell" id="get-started">
@@ -68,7 +56,7 @@ export function CtaSection({ eyebrow, payload }: CtaSectionProps) {
               <div className="cta__panel">
                 <p className="cta__panel-heading">{payload.formHeading}</p>
 
-                <form className="cta__form" onSubmit={onSubmit} noValidate>
+                <form className="cta__form" onSubmit={onSubmit}>
                   <div className="cta__segmented" role="group" aria-label="I am joining as">
                     <button
                       type="button"
@@ -94,18 +82,19 @@ export function CtaSection({ eyebrow, payload }: CtaSectionProps) {
                       autoComplete="email"
                       placeholder="you@fund.com"
                       value={email}
-                      onChange={(event) => setEmail(event.target.value)}
+                      onChange={(event) => {
+                        setEmail(event.target.value);
+                        setFeedback(null);
+                      }}
                       aria-label="Email address"
                     />
-                    <button type="submit" className="btn-brand" disabled={mutation.isPending}>
-                      {mutation.isPending ? "Sending…" : "Get access"}
+                    <button type="submit" className="btn-brand">
+                      Get access
                     </button>
                   </div>
 
                   {feedback ? (
-                    <p className={`cta__feedback cta__feedback--${feedback.tone}`} role="status">
-                      {feedback.text}
-                    </p>
+                    <p className="cta__feedback cta__feedback--err" role="status">{feedback}</p>
                   ) : null}
 
                   <p className="cta__note">{payload.formNote}</p>

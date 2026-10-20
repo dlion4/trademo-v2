@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { getPricingContent } from "@/server/services/pricing-service";
+import { PRICING_FALLBACK } from "@/lib/content/pricing-content";
 import type { ApiEnvelope, PricingContentDTO } from "@/lib/api/types";
 
 export const dynamic = "force-dynamic";
@@ -10,13 +10,10 @@ export const dynamic = "force-dynamic";
  * Structured payload for Page H-3 (Pricing & Investment Tiers).
  */
 export async function GET() {
-  const { content, usedFallback } = await getPricingContent();
-
   const body: ApiEnvelope<PricingContentDTO> = {
-    data: content,
+    data: PRICING_FALLBACK,
     meta: {
-      ...content.meta,
-      source: usedFallback ? "fallback" : "database",
+      ...PRICING_FALLBACK.meta,
       requestId: `pricing_${Date.now().toString(36)}`,
     },
   };

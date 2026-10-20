@@ -12,15 +12,13 @@ interface LiveTickerStripProps {
 }
 
 /**
- * Continuous marquee of live instrument quotes.
- * Data comes from `GET /api/market/ticker` (TanStack Query polling) — swap the
- * fetcher for a live exchange websocket subscription in production.
+ * Continuous marquee of bundled instrument quotes.
  */
 export function LiveTickerStrip({ initialQuotes }: LiveTickerStripProps) {
   const seed = initialQuotes?.length
     ? {
         quotes: initialQuotes,
-        meta: { source: "database" as const, generatedAt: new Date(0).toISOString(), version: 1 },
+        meta: { source: "fallback" as const, generatedAt: new Date(0).toISOString(), version: 1 },
       }
     : undefined;
 

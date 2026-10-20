@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-import { getFeaturesContent } from "@/server/services/features-service";
+import { FEATURES_FALLBACK } from "@/lib/content/features-content";
 import type { ApiEnvelope, FeaturesContentDTO } from "@/lib/api/types";
 
 export const dynamic = "force-dynamic";
@@ -11,13 +11,10 @@ export const dynamic = "force-dynamic";
  * the frontend swap to a remote backend is transport-only.
  */
 export async function GET() {
-  const { content, usedFallback } = await getFeaturesContent();
-
   const body: ApiEnvelope<FeaturesContentDTO> = {
-    data: content,
+    data: FEATURES_FALLBACK,
     meta: {
-      ...content.meta,
-      source: usedFallback ? "fallback" : "database",
+      ...FEATURES_FALLBACK.meta,
       requestId: `features_${Date.now().toString(36)}`,
     },
   };

@@ -12,23 +12,24 @@ import type {
   TickerFeedDTO,
 } from "@/lib/api/types";
 
-/** Landing content query — hydrated with the server-rendered payload. */
+/** Backend refetches are disabled; pages render their bundled initial payload. */
 export function useLandingContent(initialData?: LandingContentDTO) {
   return useQuery<LandingContentDTO>({
     queryKey: ["landing", "content"],
     queryFn: fetchLandingContent,
     initialData,
+    enabled: false,
     staleTime: 60_000,
   });
 }
 
-/** Marquee quotes — short polling now, websocket upgrade later. */
-export function useTickerFeed(initialData?: TickerFeedDTO, refetchInterval = 5_000) {
+/** Ticker content stays on its bundled initial data while backend integration is disabled. */
+export function useTickerFeed(initialData?: TickerFeedDTO) {
   return useQuery<TickerFeedDTO>({
     queryKey: ["market", "ticker"],
     queryFn: fetchTickerFeed,
     initialData,
-    refetchInterval,
+    enabled: false,
     staleTime: 3_000,
   });
 }
@@ -39,6 +40,7 @@ export function useFeaturesContent(initialData?: FeaturesContentDTO) {
     queryKey: ["features", "content"],
     queryFn: fetchFeaturesContent,
     initialData,
+    enabled: false,
     staleTime: 60_000,
   });
 }
@@ -49,6 +51,7 @@ export function usePricingContent(initialData?: PricingContentDTO) {
     queryKey: ["pricing", "content"],
     queryFn: fetchPricingContent,
     initialData,
+    enabled: false,
     staleTime: 60_000,
   });
 }
