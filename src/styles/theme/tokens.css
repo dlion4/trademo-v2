@@ -1,0 +1,184 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   tradeMO · Design tokens
+   LIGHT MODE IS THE PLATFORM DEFAULT.
+   Aesthetic: institutional trading terminal — paper-white surfaces, hairline
+   rules, one restrained accent, ink typography, monospaced numerics.
+   No decorative gradients. Colour is reserved for meaning (P/L, status).
+   ═══════════════════════════════════════════════════════════════════════ */
+
+:root {
+  /* ── Surfaces ── */
+  --canvas: #ffffff;
+  --canvas-alt: #f8f9fb;
+  --surface: #ffffff;
+  --surface-2: #fbfcfd;
+  --surface-sunken: #f4f6f8;
+  --surface-inset: #f9fafb;
+  /* compat aliases (used by older selectors) */
+  --canvas-raised: #ffffff;
+  --surface-glass: #ffffff;
+  --surface-glass-strong: #ffffff;
+  --surface-3: #f4f6f8;
+
+  /* ── Hairlines ── */
+  --border-subtle: #e7eaef;
+  --border: #e4e7ec;
+  --border-strong: #d3d9e0;
+  --border-glow: #c7d2dc;
+
+  /* ── Ink ── */
+  --text-primary: #0f172a;
+  --text-secondary: #475467;
+  --text-muted: #8a94a6;
+
+  /* ── Accent (single, used sparingly) ── */
+  --accent: #0f766e;
+  --accent-hover: #0b5f59;
+  --accent-soft: #eef6f4;
+  --accent-border: #b9d8d2;
+  --brand-300: #0f766e;
+  --brand-400: #0f766e;
+  --brand-500: #0f766e;
+  --brand-600: #0b5f59;
+
+  /* ── Semantic ── */
+  --win: #067647;
+  --win-soft: #eaf6ef;
+  --loss: #b42318;
+  --loss-soft: #fdeceb;
+  --warning: #b54708;
+  --warning-soft: #fef6ec;
+  --info: #175cd3;
+  --info-soft: #eef4fd;
+  --neutral-soft: #f2f4f7;
+
+  /* legacy aliases */
+  --violet-400: #475467;
+  --violet-500: #344054;
+  --amber-400: #b54708;
+  --amber-500: #b54708;
+
+  /* ── Flat colour fields (no gradients) ── */
+  --grad-brand: #0f766e;
+  --grad-brand-soft: #eef6f4;
+  --grad-surface: #ffffff;
+  --grad-glow: #ffffff;
+
+  /* ── Spacing ── */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+  --space-10: 128px;
+
+  /* ── Radii (crisp, not bubbly) ── */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --radius-pill: 999px;
+
+  /* ── Motion ── */
+  --dur-fast: 140ms;
+  --dur-base: 240ms;
+  --dur-slow: 400ms;
+  --dur-slower: 640ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --stagger-step: 60ms;
+
+  /* ── Elevation (restrained) ── */
+  --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.05);
+  --shadow-md: 0 1px 3px rgba(16, 24, 40, 0.06), 0 1px 2px rgba(16, 24, 40, 0.04);
+  --shadow-lift: 0 10px 24px -14px rgba(16, 24, 40, 0.22), 0 2px 6px -2px rgba(16, 24, 40, 0.06);
+  --shadow-glow: var(--shadow-lift);
+
+  /* ── Type ── */
+  --font-sans: "Inter", -apple-system, "Segoe UI", system-ui, sans-serif;
+  --font-display: "Inter", -apple-system, "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  /* ── Bootstrap 5.3 bridge ── */
+  --bs-body-bg: #ffffff;
+  --bs-body-color: #0f172a;
+  --bs-body-font-family: var(--font-sans);
+  --bs-border-color: #e4e7ec;
+  --bs-border-radius: 10px;
+  --bs-primary: #0f766e;
+  --bs-primary-rgb: 15, 118, 110;
+  --bs-link-color: #0f766e;
+  --bs-link-hover-color: #0b5f59;
+  --bs-secondary-color: #475467;
+  --bs-tertiary-color: #8a94a6;
+  --bs-emphasis-color: #0f172a;
+  --bs-secondary-bg: #f4f6f8;
+  --bs-tertiary-bg: #fbfcfd;
+  --bs-font-sans-serif: var(--font-sans);
+}
+
+/* ── Optional dark theme (a future toggle can flip data-bs-theme) ── */
+[data-bs-theme="dark"] {
+  --canvas: #0b0f16;
+  --canvas-alt: #0e131c;
+  --surface: #111725;
+  --surface-2: #151c2b;
+  --surface-sunken: #0d121c;
+  --surface-inset: #0f141f;
+  --surface-glass: #111725;
+  --surface-glass-strong: #111725;
+  --surface-3: #151c2b;
+
+  --border-subtle: #1e2635;
+  --border: #222b3b;
+  --border-strong: #2c374a;
+  --border-glow: #33405a;
+
+  --text-primary: #e9edf4;
+  --text-secondary: #a3aebf;
+  --text-muted: #6f7b8e;
+
+  --accent: #2dd4bf;
+  --accent-hover: #5eead4;
+  --accent-soft: #10231f;
+  --accent-border: #1d4d45;
+  --brand-300: #5eead4;
+  --brand-400: #2dd4bf;
+  --brand-500: #14b8a6;
+  --brand-600: #0d9488;
+
+  --win: #34d399;
+  --win-soft: #0f2620;
+  --loss: #f87171;
+  --loss-soft: #2a1517;
+  --warning: #fbbf24;
+  --warning-soft: #2a2010;
+  --info: #60a5fa;
+  --info-soft: #101d33;
+  --neutral-soft: #17202e;
+
+  --violet-400: #a3aebf;
+  --violet-500: #a3aebf;
+
+  --grad-brand: #14b8a6;
+  --grad-brand-soft: #10231f;
+  --grad-surface: #111725;
+  --grad-glow: #111725;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 2px 6px rgba(0, 0, 0, 0.45);
+  --shadow-lift: 0 12px 28px -16px rgba(0, 0, 0, 0.7);
+
+  --bs-body-bg: #0b0f16;
+  --bs-body-color: #e9edf4;
+  --bs-border-color: #222b3b;
+  --bs-secondary-color: #a3aebf;
+  --bs-tertiary-color: #6f7b8e;
+  --bs-secondary-bg: #151c2b;
+  --bs-tertiary-bg: #111725;
+  --bs-emphasis-color: #ffffff;
+}

@@ -1,0 +1,212 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   Page A-2 · Sign In — scoped under .page-auth-signin
+   Centered card, max-width 460px, full-bleed on xs.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.page-auth-signin .signin-card {
+  animation: fadeSlideUp var(--dur-base) var(--ease-out) both;
+}
+
+.page-auth-signin .signin-card.shake {
+  animation: shake 220ms var(--ease-in-out);
+}
+
+.page-auth-signin .signin-glyph {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  font-size: 0.95rem;
+  margin-bottom: var(--space-3);
+}
+
+/* SSO */
+.page-auth-signin .signin-sso {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.page-auth-signin .signin-sso__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+  color: var(--text-primary);
+  font-size: 0.88rem;
+  font-weight: 600;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-base) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.page-auth-signin .signin-sso__btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  border-color: #98a2b3;
+  box-shadow: 0 8px 18px -10px rgba(66, 133, 244, 0.45);
+}
+
+.page-auth-signin .signin-sso__btn--deriv:hover:not(:disabled) {
+  box-shadow: 0 8px 18px -10px rgba(255, 68, 79, 0.5);
+}
+
+.page-auth-signin .signin-sso__deriv {
+  display: grid;
+  place-items: center;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  background: #ff444f;
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.page-auth-signin .signin-sso__note {
+  margin: var(--space-3) 0 0;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* Demo helper */
+.page-auth-signin .signin-demo {
+  margin-top: var(--space-4);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+}
+
+.page-auth-signin .signin-demo summary {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0.6rem 0.85rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  list-style: none;
+}
+
+.page-auth-signin .signin-demo summary::-webkit-details-marker {
+  display: none;
+}
+
+.page-auth-signin .signin-demo summary .mono {
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.page-auth-signin .signin-demo__list {
+  display: grid;
+  border-top: 1px solid var(--border);
+}
+
+.page-auth-signin .signin-demo__list button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: 0.55rem 0.85rem;
+  border: 0;
+  border-bottom: 1px solid var(--border-subtle);
+  background: transparent;
+  text-align: left;
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.page-auth-signin .signin-demo__list button:last-child {
+  border-bottom: 0;
+}
+
+.page-auth-signin .signin-demo__list button:hover {
+  background: var(--surface);
+}
+
+.page-auth-signin .signin-demo__list strong {
+  display: block;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.page-auth-signin .signin-demo__note {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+/* Redirect state */
+.page-auth-signin .signin-redirect {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-3);
+  padding-block: var(--space-6);
+}
+
+/* Role picker */
+.page-auth-signin .signin-picker {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.page-auth-signin .signin-picker__option {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-4);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  text-align: left;
+  color: var(--text-secondary);
+  transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-base) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.page-auth-signin .signin-picker__option:hover:not(:disabled) {
+  transform: translateY(-2px);
+  border-color: #0f172a;
+  box-shadow: var(--shadow-lift);
+}
+
+.page-auth-signin .signin-picker__icon {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: var(--radius-md);
+  background: #0f172a;
+  color: #fff;
+}
+
+.page-auth-signin .signin-picker__text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.84rem;
+}
+
+.page-auth-signin .signin-picker__text strong {
+  display: flex;
+  align-items: center;
+  color: var(--text-primary);
+  font-size: 0.98rem;
+  font-weight: 650;
+}
+
+@media (max-width: 575.98px) {
+  .page-auth-signin .auth-frame--sm {
+    max-width: none;
+  }
+}

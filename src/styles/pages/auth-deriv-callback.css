@@ -1,0 +1,249 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   Page A-8 · Deriv OAuth Callback — scoped under .page-auth-deriv-callback
+   Stepper with spin per running step, check draw-in on completion,
+   error card shake + pulse. Centered card 540px.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.page-auth-deriv-callback .dc-card {
+  animation: fadeSlideUp var(--dur-base) var(--ease-out) both;
+}
+
+.page-auth-deriv-callback .dc-card.shake {
+  animation: shake 220ms var(--ease-in-out);
+}
+
+.page-auth-deriv-callback .dc-head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
+}
+
+.page-auth-deriv-callback .dc-logos {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.page-auth-deriv-callback .dc-logo {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 9px;
+  font-weight: 800;
+  font-size: 0.9rem;
+}
+
+.page-auth-deriv-callback .dc-logo--deriv {
+  background: #ff444f;
+  color: #fff;
+  font-size: 1.1rem;
+}
+
+.page-auth-deriv-callback .dc-logos__link {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text-muted);
+}
+
+.page-auth-deriv-callback .dc-title {
+  margin: 4px 0 0;
+  font-size: 1.3rem;
+  letter-spacing: -0.02em;
+}
+
+/* steps */
+.page-auth-deriv-callback .dc-steps {
+  position: relative;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.page-auth-deriv-callback .dc-step {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 0.7rem var(--space-4);
+  border-bottom: 1px solid var(--border-subtle);
+  transition: background var(--dur-base) var(--ease-out);
+}
+
+.page-auth-deriv-callback .dc-step:last-child {
+  border-bottom: 0;
+}
+
+.page-auth-deriv-callback .dc-step__icon {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1.5px solid var(--border-strong);
+  color: var(--text-muted);
+  transition: all var(--dur-base) var(--ease-out);
+}
+
+.page-auth-deriv-callback .dc-step__text {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.page-auth-deriv-callback .dc-step__text strong {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.page-auth-deriv-callback .dc-step__text span {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.page-auth-deriv-callback .dc-step.is-done .dc-step__icon {
+  border-color: var(--win);
+  background: var(--win);
+  color: #fff;
+}
+
+.page-auth-deriv-callback .dc-step.is-done strong {
+  color: var(--text-primary);
+}
+
+.page-auth-deriv-callback .dc-step.is-active {
+  background: var(--surface-2);
+}
+
+.page-auth-deriv-callback .dc-step.is-active .dc-step__icon {
+  border-color: #0f172a;
+  color: #0f172a;
+}
+
+.page-auth-deriv-callback .dc-step.is-active strong {
+  color: var(--text-primary);
+}
+
+.page-auth-deriv-callback .dc-step.is-failed {
+  background: var(--loss-soft);
+}
+
+.page-auth-deriv-callback .dc-step.is-failed .dc-step__icon {
+  border-color: var(--loss);
+  background: var(--loss);
+  color: #fff;
+  animation: iconPulse 1.4s var(--ease-in-out) 2;
+}
+
+.page-auth-deriv-callback .dc-step.is-failed strong,
+.page-auth-deriv-callback .dc-step.is-failed span {
+  color: var(--loss);
+}
+
+/* result */
+.page-auth-deriv-callback .dc-result {
+  margin-top: var(--space-5);
+}
+
+.page-auth-deriv-callback .dc-acct {
+  display: inline-block;
+  padding: 0.1rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.page-auth-deriv-callback .dc-acct.is-real { color: var(--win); background: var(--win-soft); }
+.page-auth-deriv-callback .dc-acct.is-demo { color: var(--warning); background: var(--warning-soft); }
+
+.page-auth-deriv-callback .dc-perms {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 4px;
+}
+
+.page-auth-deriv-callback .dc-perms .pill {
+  text-transform: capitalize;
+}
+
+.page-auth-deriv-callback .dc-muted {
+  margin: var(--space-3) 0 0;
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+/* error */
+.page-auth-deriv-callback .dc-error {
+  margin-top: var(--space-5);
+}
+
+.page-auth-deriv-callback .dc-error__box {
+  display: flex;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid #f5c6c2;
+  border-radius: var(--radius-md);
+  background: var(--loss-soft);
+}
+
+.page-auth-deriv-callback .dc-error__box strong {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--loss);
+}
+
+.page-auth-deriv-callback .dc-error__box p {
+  margin: 2px 0 6px;
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+.page-auth-deriv-callback .dc-error__code {
+  font-size: 0.72rem;
+  color: var(--loss);
+}
+
+.page-auth-deriv-callback .dc-error__actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+  margin-top: var(--space-4);
+}
+
+.page-auth-deriv-callback .dc-foot {
+  max-width: 540px;
+  margin: var(--space-4) auto 0;
+  text-align: center;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+}
+
+@media (max-width: 575.98px) {
+  .page-auth-deriv-callback .dc-head {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .page-auth-deriv-callback .dc-error__actions {
+    grid-template-columns: 1fr;
+  }
+}

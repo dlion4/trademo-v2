@@ -1,0 +1,30 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   tradeMO · Global stylesheet entrypoint
+   Bootstrap 5.3 is imported first (see src/app/layout.tsx) so the layers
+   below can override it deterministically.
+
+   Layer order:
+     1. theme/tokens.css   — design tokens + Bootstrap variable bridge
+     2. base.css           — typography, resets, shared primitives
+     3. app-shell.css      — always-mounted navbar / footer
+     4. pages/<page>.css   — page-scoped styles (one file per page)
+   ═══════════════════════════════════════════════════════════════════════ */
+
+@import "../styles/theme/tokens.css";
+@import "../styles/base.css";
+@import "../styles/app-shell.css";
+@import "../styles/components/auth.css";
+@import "../styles/components/operator-shell.css";
+@import "../styles/pages/landing.css";
+@import "../styles/pages/features.css";
+@import "../styles/pages/pricing.css";
+@import "../styles/pages/auth-signup.css";
+@import "../styles/pages/auth-signin.css";
+@import "../styles/pages/auth-onboarding-investor.css";
+@import "../styles/pages/auth-forgot-password.css";
+@import "../styles/pages/auth-reset-password.css";
+@import "../styles/pages/auth-verify-email.css";
+@import "../styles/pages/auth-2fa.css";
+@import "../styles/pages/auth-deriv-callback.css";
+@import "../styles/pages/dashboard-command-center.css";
+@import "../styles/pages/dashboard-schedules.css";

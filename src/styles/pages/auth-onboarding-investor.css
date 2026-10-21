@@ -1,0 +1,760 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   Page A-3 · Investor Onboarding — scoped under .page-auth-onboarding-investor
+   Stepper horizontal md+, vertical on sm. Dropzones full width on sm.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.page-auth-onboarding-investor .auth-main {
+  justify-content: flex-start;
+  padding-top: var(--space-6);
+}
+
+.page-auth-onboarding-investor .onb-head {
+  margin-bottom: var(--space-5);
+}
+
+.page-auth-onboarding-investor .onb-head__title {
+  margin: var(--space-2) 0 0;
+  font-size: 1.75rem;
+  letter-spacing: -0.028em;
+}
+
+/* ── Stepper ── */
+.page-auth-onboarding-investor .onb-stepper {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0 0 var(--space-5);
+  padding: 0;
+  list-style: none;
+}
+
+.page-auth-onboarding-investor .onb-stepper__track {
+  position: absolute;
+  top: 15px;
+  left: 12.5%;
+  right: 12.5%;
+  height: 2px;
+  background: var(--border);
+  border-radius: 2px;
+}
+
+.page-auth-onboarding-investor .onb-stepper__fill {
+  display: block;
+  height: 100%;
+  background: #0f172a;
+  border-radius: inherit;
+  transition: width var(--dur-slower) var(--ease-out);
+}
+
+.page-auth-onboarding-investor .onb-step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+}
+
+.page-auth-onboarding-investor .onb-step__dot {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1.5px solid var(--border-strong);
+  background: var(--surface);
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  transition: all var(--dur-base) var(--ease-out);
+}
+
+.page-auth-onboarding-investor .onb-step__label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.page-auth-onboarding-investor .onb-step.is-current .onb-step__dot {
+  border-color: #0f172a;
+  color: var(--text-primary);
+  box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.08);
+}
+
+.page-auth-onboarding-investor .onb-step.is-current .onb-step__label {
+  color: var(--text-primary);
+}
+
+.page-auth-onboarding-investor .onb-step.is-done .onb-step__dot {
+  border-color: #0f172a;
+  background: #0f172a;
+  color: #fff;
+}
+
+.page-auth-onboarding-investor .onb-step.is-done .onb-step__label {
+  color: var(--text-secondary);
+}
+
+/* ── Card & panel ── */
+.page-auth-onboarding-investor .onb-card {
+  padding: var(--space-6);
+}
+
+.page-auth-onboarding-investor .onb-panel {
+  animation: fadeSlideUp var(--dur-slow) var(--ease-out) 200ms both;
+}
+
+.page-auth-onboarding-investor .onb-section-head {
+  margin-bottom: var(--space-5);
+}
+
+.page-auth-onboarding-investor .onb-section-head h2 {
+  margin: 0 0 var(--space-2);
+  font-size: 1.3rem;
+  letter-spacing: -0.02em;
+}
+
+.page-auth-onboarding-investor .onb-section-head p {
+  margin: 0;
+  max-width: 64ch;
+  font-size: 0.93rem;
+}
+
+.page-auth-onboarding-investor .onb-subhead {
+  margin: var(--space-6) 0 var(--space-3);
+  font-size: 0.74rem;
+  font-weight: 650;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+
+/* stats */
+.page-auth-onboarding-investor .onb-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.page-auth-onboarding-investor .onb-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--space-4) var(--space-5);
+  border-right: 1px solid var(--border-subtle);
+  background: var(--surface-2);
+}
+
+.page-auth-onboarding-investor .onb-stat:last-child {
+  border-right: 0;
+}
+
+.page-auth-onboarding-investor .onb-stat__label {
+  font-size: 0.7rem;
+  font-weight: 650;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.page-auth-onboarding-investor .onb-stat__value {
+  font-size: 1.75rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  color: var(--text-primary);
+}
+
+.page-auth-onboarding-investor .onb-stat__hint {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+}
+
+/* comparison */
+.page-auth-onboarding-investor .onb-compare {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+.page-auth-onboarding-investor .onb-compare .table {
+  --bs-table-bg: transparent;
+  font-size: 0.88rem;
+}
+
+.page-auth-onboarding-investor .onb-compare th,
+.page-auth-onboarding-investor .onb-compare td {
+  padding: 0.7rem var(--space-4);
+  border-color: var(--border-subtle);
+}
+
+.page-auth-onboarding-investor .onb-compare thead th {
+  font-size: 0.74rem;
+  font-weight: 650;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  background: var(--surface-2);
+}
+
+.page-auth-onboarding-investor .onb-compare tbody th {
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.page-auth-onboarding-investor .onb-compare tbody tr:last-child > * {
+  border-bottom: 0;
+}
+
+.page-auth-onboarding-investor .onb-compare__pool {
+  color: var(--accent);
+}
+
+/* flow diagram */
+.page-auth-onboarding-investor .onb-flow {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.page-auth-onboarding-investor .onb-flow__stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  opacity: 0;
+  animation: fadeSlideUp var(--dur-slow) var(--ease-out) forwards;
+}
+
+.page-auth-onboarding-investor .onb-flow__icon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-sm);
+  background: #0f172a;
+  color: #fff;
+}
+
+.page-auth-onboarding-investor .onb-flow__idx {
+  position: absolute;
+  top: var(--space-4);
+  right: var(--space-4);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.page-auth-onboarding-investor .onb-flow__stage strong {
+  margin-top: 6px;
+  font-size: 0.95rem;
+  color: var(--text-primary);
+}
+
+.page-auth-onboarding-investor .onb-flow__stage p {
+  margin: 0;
+  font-size: 0.8rem;
+  line-height: 1.5;
+}
+
+.page-auth-onboarding-investor .onb-flow__dur {
+  margin-top: auto;
+  padding-top: 6px;
+  font-size: 0.72rem;
+  color: var(--accent);
+}
+
+.page-auth-onboarding-investor .onb-flow__link {
+  position: absolute;
+  top: 34px;
+  right: calc(-1 * var(--space-4) - 1px);
+  width: calc(var(--space-4) + 2px);
+  height: 2px;
+  background: var(--border);
+  overflow: hidden;
+  z-index: 1;
+}
+
+.page-auth-onboarding-investor .onb-flow__link span {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  animation: chartDraw var(--dur-slow) var(--ease-out) both;
+}
+
+/* calc */
+.page-auth-onboarding-investor .onb-calc {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.page-auth-onboarding-investor .onb-calc__table {
+  margin: 0;
+}
+
+.page-auth-onboarding-investor .onb-calc__table > div {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: 0.7rem var(--space-4);
+  border-bottom: 1px solid var(--border-subtle);
+  font-size: 0.9rem;
+}
+
+.page-auth-onboarding-investor .onb-calc__table dt {
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.page-auth-onboarding-investor .onb-calc__table dd {
+  margin: 0;
+  font-weight: 600;
+  color: var(--text-primary);
+  text-align: right;
+}
+
+.page-auth-onboarding-investor .onb-calc__table dd span {
+  margin-left: 6px;
+  font-weight: 500;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+}
+
+.page-auth-onboarding-investor .onb-calc__table .is-total {
+  background: var(--surface-2);
+  font-size: 1rem;
+}
+
+.page-auth-onboarding-investor .onb-calc__table .is-total dt {
+  color: var(--text-primary);
+  font-weight: 650;
+}
+
+.page-auth-onboarding-investor .is-win { color: var(--win) !important; }
+.page-auth-onboarding-investor .is-loss { color: var(--loss) !important; }
+
+.page-auth-onboarding-investor .onb-calc__note {
+  display: flex;
+  gap: 8px;
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.page-auth-onboarding-investor .onb-calc__note svg {
+  flex-shrink: 0;
+  margin-top: 3px;
+}
+
+/* KYC */
+.page-auth-onboarding-investor .onb-kyc {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.page-auth-onboarding-investor .onb-kyc__label {
+  display: block;
+  margin-bottom: var(--space-2);
+  font-size: 0.82rem;
+  font-weight: 650;
+  color: var(--text-primary);
+}
+
+.page-auth-onboarding-investor .onb-seg {
+  display: inline-flex;
+  flex-wrap: wrap;
+  padding: 3px;
+  gap: 3px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  background: var(--surface-sunken);
+}
+
+.page-auth-onboarding-investor .onb-seg__opt {
+  padding: 0.45rem 0.95rem;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  transition: all var(--dur-fast) var(--ease-out);
+}
+
+.page-auth-onboarding-investor .onb-seg__opt.is-active {
+  background: var(--surface);
+  color: var(--text-primary);
+  box-shadow: var(--shadow-md);
+}
+
+.page-auth-onboarding-investor .kyc-drop {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1.5px dashed var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--surface-2);
+  transition: border-color var(--dur-fast) var(--ease-out), background var(--dur-fast) var(--ease-out);
+}
+
+.page-auth-onboarding-investor .kyc-drop.is-drag {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.page-auth-onboarding-investor .kyc-drop.is-done {
+  border-style: solid;
+  border-color: #bce0cb;
+  background: var(--win-soft);
+}
+
+.page-auth-onboarding-investor .kyc-drop.is-invalid {
+  border-color: var(--loss);
+}
+
+.page-auth-onboarding-investor .kyc-drop__icon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-secondary);
+}
+
+.page-auth-onboarding-investor .kyc-drop.is-done .kyc-drop__icon {
+  color: var(--win);
+  border-color: #bce0cb;
+}
+
+.page-auth-onboarding-investor .kyc-drop__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.page-auth-onboarding-investor .kyc-drop__body strong {
+  font-size: 0.88rem;
+  color: var(--text-primary);
+}
+
+.page-auth-onboarding-investor .kyc-drop__hint,
+.page-auth-onboarding-investor .kyc-drop__file {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.page-auth-onboarding-investor .kyc-drop.is-invalid .kyc-drop__hint {
+  color: var(--loss);
+}
+
+.page-auth-onboarding-investor .kyc-drop__progress {
+  height: 4px;
+  border-radius: 999px;
+  background: var(--border);
+  overflow: hidden;
+}
+
+.page-auth-onboarding-investor .kyc-drop__progress span {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  transition: width 140ms linear;
+}
+
+.page-auth-onboarding-investor .onb-select {
+  height: 44px;
+  border-color: var(--border-strong);
+  border-radius: var(--radius-md);
+  font-size: 0.92rem;
+  max-width: 460px;
+}
+
+.page-auth-onboarding-investor .onb-select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.12);
+}
+
+/* Done */
+.page-auth-onboarding-investor .onb-done-head {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-4);
+  margin-bottom: var(--space-5);
+}
+
+.page-auth-onboarding-investor .onb-done-head h2 {
+  margin: 4px 0 6px;
+  font-size: 1.35rem;
+}
+
+.page-auth-onboarding-investor .onb-done-head p {
+  margin: 0;
+  font-size: 0.92rem;
+}
+
+.page-auth-onboarding-investor .onb-checklist {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.page-auth-onboarding-investor .onb-checklist li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 0.75rem var(--space-4);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.page-auth-onboarding-investor .onb-checklist li:last-child {
+  border-bottom: 0;
+}
+
+.page-auth-onboarding-investor .onb-checklist li > span:nth-child(2) {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+}
+
+.page-auth-onboarding-investor .onb-checklist strong {
+  font-size: 0.88rem;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.page-auth-onboarding-investor .onb-checklist__mark {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1.5px solid var(--border-strong);
+}
+
+.page-auth-onboarding-investor .is-done .onb-checklist__mark { background: var(--win); border-color: var(--win); color: #fff; }
+.page-auth-onboarding-investor .is-pending .onb-checklist__mark { border-color: var(--warning); color: var(--warning); }
+
+.page-auth-onboarding-investor .onb-checklist__status {
+  font-size: 0.72rem;
+  font-weight: 650;
+  color: var(--text-muted);
+}
+
+.page-auth-onboarding-investor .is-done .onb-checklist__status { color: var(--win); }
+.page-auth-onboarding-investor .is-pending .onb-checklist__status { color: var(--warning); }
+
+.page-auth-onboarding-investor .onb-pools {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.page-auth-onboarding-investor .onb-pool {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  color: var(--text-secondary);
+  transition: transform var(--dur-base) var(--ease-out), box-shadow var(--dur-base) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.page-auth-onboarding-investor .onb-pool:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lift);
+  border-color: var(--border-strong);
+  color: var(--text-secondary);
+}
+
+.page-auth-onboarding-investor .onb-pool__top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.page-auth-onboarding-investor .onb-pool__code {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.page-auth-onboarding-investor .onb-pool__status,
+.page-auth-onboarding-investor .onb-pool__risk {
+  padding: 0.1rem 0.42rem;
+  border-radius: 4px;
+  font-size: 0.66rem;
+  font-weight: 650;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid var(--border);
+}
+
+.page-auth-onboarding-investor .onb-pool__status.is-open { color: var(--info); background: var(--info-soft); border-color: #c8dafa; }
+.page-auth-onboarding-investor .onb-pool__status.is-scheduled { color: var(--warning); background: var(--warning-soft); border-color: #efd9b8; }
+.page-auth-onboarding-investor .onb-pool__risk { margin-left: auto; color: var(--text-muted); }
+.page-auth-onboarding-investor .onb-pool__risk.is-medium { color: var(--warning); }
+.page-auth-onboarding-investor .onb-pool__risk.is-high { color: var(--loss); }
+
+.page-auth-onboarding-investor .onb-pool__name {
+  font-size: 0.98rem;
+  color: var(--text-primary);
+}
+
+.page-auth-onboarding-investor .onb-pool__meta {
+  display: flex;
+  gap: var(--space-5);
+}
+
+.page-auth-onboarding-investor .onb-pool__meta span {
+  display: flex;
+  flex-direction: column;
+}
+
+.page-auth-onboarding-investor .onb-pool__meta em {
+  font-style: normal;
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+.page-auth-onboarding-investor .onb-pool__meta b {
+  font-size: 0.9rem;
+  color: var(--text-primary);
+}
+
+.page-auth-onboarding-investor .onb-pool__fill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.74rem;
+}
+
+.page-auth-onboarding-investor .onb-pool__bar {
+  flex: 1;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--surface-sunken);
+  overflow: hidden;
+}
+
+.page-auth-onboarding-investor .onb-pool__bar span {
+  display: block;
+  height: 100%;
+  background: #0f172a;
+  animation: chartDraw var(--dur-slower) var(--ease-out) both;
+}
+
+/* actions */
+.page-auth-onboarding-investor .onb-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  margin-top: var(--space-6);
+  padding-top: var(--space-5);
+  border-top: 1px solid var(--border-subtle);
+}
+
+.page-auth-onboarding-investor .onb-actions__note {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  max-width: 46ch;
+}
+
+.page-auth-onboarding-investor .onb-actions > :last-child {
+  margin-left: auto;
+}
+
+.page-auth-onboarding-investor .onb-submit {
+  width: auto;
+  padding-inline: 1.3rem;
+}
+
+/* ── Responsive ── */
+@media (max-width: 991.98px) {
+  .page-auth-onboarding-investor .onb-flow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .page-auth-onboarding-investor .onb-flow__link {
+    display: none;
+  }
+}
+
+@media (max-width: 767.98px) {
+  .page-auth-onboarding-investor .onb-card {
+    padding: var(--space-5) var(--space-4);
+  }
+
+  /* vertical stepper */
+  .page-auth-onboarding-investor .onb-stepper {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+    padding-left: 4px;
+  }
+
+  .page-auth-onboarding-investor .onb-stepper__track {
+    top: 16px;
+    bottom: 16px;
+    left: 19px;
+    right: auto;
+    width: 2px;
+    height: auto;
+  }
+
+  .page-auth-onboarding-investor .onb-stepper__fill {
+    width: 100% !important;
+    height: var(--fill, 0%);
+  }
+
+  .page-auth-onboarding-investor .onb-step {
+    flex-direction: row;
+    text-align: left;
+    gap: var(--space-3);
+  }
+
+  .page-auth-onboarding-investor .onb-stats {
+    grid-template-columns: 1fr;
+  }
+
+  .page-auth-onboarding-investor .onb-stat {
+    border-right: 0;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .page-auth-onboarding-investor .onb-flow {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-auth-onboarding-investor .onb-flow__stage {
+    opacity: 1;
+  }
+}

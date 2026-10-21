@@ -1,0 +1,89 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   Page A-6 · Email Verification — scoped under .page-auth-verify-email
+   Envelope icon-draw, success check draw, resend countdown ring.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.page-auth-verify-email .ve-card {
+  animation: fadeSlideUp var(--dur-base) var(--ease-out) both;
+}
+
+.page-auth-verify-email .ve-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-2);
+}
+
+.page-auth-verify-email .ve-center .status-mark {
+  margin-bottom: var(--space-3);
+}
+
+.page-auth-verify-email .ve-center .auth-heading {
+  align-items: center;
+}
+
+.page-auth-verify-email .ve-spinner {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  margin-bottom: var(--space-3);
+  border-radius: 50%;
+  background: var(--surface-sunken);
+  color: var(--text-secondary);
+}
+
+.page-auth-verify-email .ve-muted {
+  margin: var(--space-2) 0 0;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.page-auth-verify-email .ve-resend {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+}
+
+.page-auth-verify-email .ve-resend__text {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.page-auth-verify-email .ve-resend__text strong {
+  font-size: 0.88rem;
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.page-auth-verify-email .ve-resend__btn {
+  width: auto;
+  height: 38px;
+  padding-inline: 1rem;
+}
+
+.page-auth-verify-email .ve-change {
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+}
+
+.page-auth-verify-email .ve-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+  font-size: 0.86rem;
+  color: var(--text-muted);
+}

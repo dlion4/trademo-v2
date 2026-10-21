@@ -1,0 +1,122 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   Page A-7 · Two-Factor Auth — scoped under .page-auth-2fa
+   OTP boxes focus-in stagger 60ms, shake on invalid, draw on success.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.page-auth-2fa .tf-card {
+  animation: fadeSlideUp var(--dur-base) var(--ease-out) both;
+}
+
+.page-auth-2fa .tf-card.shake {
+  animation: shake 220ms var(--ease-in-out);
+}
+
+.page-auth-2fa .tf-mark {
+  display: grid;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  margin-bottom: var(--space-2);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+  color: var(--text-primary);
+}
+
+.page-auth-2fa .tf-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-2);
+}
+
+.page-auth-2fa .tf-center .status-mark {
+  margin-bottom: var(--space-3);
+}
+
+.page-auth-2fa .tf-center .auth-heading {
+  align-items: center;
+}
+
+.page-auth-2fa .tf-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.page-auth-2fa .tf-timer {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 6px var(--space-3);
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.page-auth-2fa .tf-timer__bar {
+  grid-column: 1 / -1;
+  height: 3px;
+  border-radius: 999px;
+  background: var(--surface-sunken);
+  overflow: hidden;
+}
+
+.page-auth-2fa .tf-timer__bar span {
+  display: block;
+  height: 100%;
+  background: var(--accent);
+  transition: width 250ms linear;
+}
+
+.page-auth-2fa .tf-backup__input {
+  letter-spacing: 0.3em;
+  font-size: 1.05rem !important;
+}
+
+.page-auth-2fa .tf-help {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.page-auth-2fa .tf-help__opt {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding: var(--space-4);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  text-align: left;
+  color: var(--text-secondary);
+  transition: border-color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+}
+
+.page-auth-2fa .tf-help__opt:hover {
+  border-color: #0f172a;
+  transform: translateY(-1px);
+  color: var(--text-secondary);
+}
+
+.page-auth-2fa .tf-help__opt > span {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  font-size: 0.8rem;
+}
+
+.page-auth-2fa .tf-help__opt strong {
+  font-size: 0.92rem;
+  color: var(--text-primary);
+}
+
+.page-auth-2fa .tf-switch {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
