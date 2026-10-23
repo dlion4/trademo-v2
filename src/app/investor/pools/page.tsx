@@ -1,17 +1,28 @@
 import type { Metadata } from "next";
-import { redirect } from "next/navigation";
+
+import { InvestorPoolsPage } from "@/components/investor/investor-pools-page";
+import { getPoolsWorkspace } from "@/server/services/investor-pools-service";
 
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Active pools · Investor · tradeMO",
+  title: "Crowdfunding Pools (I-2) · tradeMO",
+  description:
+    "Investor crowdfunding pool register: live trading pools, open funding windows, upcoming launches, completed settlements, launch roadmap, comparison, projections and slot booking.",
 };
 
-/**
- * Deep-link target for the I-1 "Book a slot" quick action. I-1 owns the pool
- * book, so the canonical investor page renders it with the pool section in
- * view; the dedicated pool detail page ships with I-2.
- */
-export default function InvestorPoolsPage() {
-  redirect("/investor?focus=pools");
+/** Page I-2 — Crowdfunding Pools (/investor/pools) */
+export default async function PoolsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ pool?: string; action?: string }>;
+}) {
+  const { pool, action } = await searchParams;
+  return (
+    <InvestorPoolsPage
+      initial={getPoolsWorkspace()}
+      initialPool={pool}
+      initialAction={action}
+    />
+  );
 }
