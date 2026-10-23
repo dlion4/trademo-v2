@@ -42,3 +42,15 @@
 @import "../styles/pages/dashboard-funds.css";
 
 @import "../styles/pages/dashboard-withdrawals.css";
+
+@import "../styles/pages/dashboard-comms.css";
+
+@import "../styles/pages/dashboard-deposits.css";
+
+@import "../styles/pages/dashboard-logs.css";
+
+@import "../styles/pages/dashboard-markets.css";
+
+@import "../styles/pages/dashboard-bots.css";
+
+@import "../styles/pages/dashboard-settings.css";
