@@ -28,3 +28,17 @@
 @import "../styles/pages/auth-deriv-callback.css";
 @import "../styles/pages/dashboard-command-center.css";
 @import "../styles/pages/dashboard-schedules.css";
+
+@import "../styles/pages/dashboard-live-trading.css";
+
+@import "../styles/pages/dashboard-trade-log.css";
+
+@import "../styles/pages/dashboard-packages.css";
+
+@import "../styles/pages/dashboard-investors.css";
+
+@import "../styles/pages/dashboard-analytics.css";
+
+@import "../styles/pages/dashboard-funds.css";
+
+@import "../styles/pages/dashboard-withdrawals.css";
