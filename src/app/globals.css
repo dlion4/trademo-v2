@@ -15,6 +15,7 @@
 @import "../styles/app-shell.css";
 @import "../styles/components/auth.css";
 @import "../styles/components/operator-shell.css";
+@import "../styles/components/investor-shell.css";
 @import "../styles/pages/landing.css";
 @import "../styles/pages/features.css";
 @import "../styles/pages/pricing.css";
@@ -54,3 +55,5 @@
 @import "../styles/pages/dashboard-bots.css";
 
 @import "../styles/pages/dashboard-settings.css";
+
+@import "../styles/pages/investor-overview.css";
