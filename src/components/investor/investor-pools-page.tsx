@@ -2189,6 +2189,14 @@ export function InvestorPoolsPage({
       walletBalance={data.summary.wallet}
       unread={data.summary.unread}
       activeNav={activeNav}
+      detailHref={`/investor/pools/${
+        (modal?.kind === "poolDetail" ? modal.id : undefined) ??
+        data.trading[0]?.id ??
+        data.open[0]?.id ??
+        data.upcoming[0]?.id ??
+        data.completed[0]?.id ??
+        "pkg_01"
+      }`}
       quickActions={quickActions}
       onNavigate={scrollTo}
       onOpenDrawer={(tab: InvestorDrawerTab) =>

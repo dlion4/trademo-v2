@@ -109,6 +109,43 @@
   padding: 8px 18px;
 }
 
+/* Page entries in the sidebar: real links to I-1 / I-2 / I-3. */
+
+a.op-nav-link {
+  text-decoration: none;
+}
+
+.op-nav-link--page {
+  font-weight: 600;
+}
+
+.op-nav-link--page .op-nav-link__text {
+  font-weight: 600;
+}
+
+.op-nav-code {
+  margin-left: auto;
+  padding: 0.04rem 0.34rem;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  background: var(--surface);
+  color: var(--text-muted);
+  font-size: 0.6rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+}
+
+.op-nav-link--page.is-active .op-nav-code {
+  border-color: var(--accent-border);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.op-shell.is-rail .op-nav-code {
+  display: none;
+}
+
 .iv-mobile-nav {
   position: fixed;
   left: 0;
@@ -116,14 +153,16 @@
   bottom: 0;
   z-index: 1040;
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(6, minmax(0, 1fr));
   background: var(--surface);
   border-top: 1px solid var(--border-strong);
   padding-bottom: env(safe-area-inset-bottom);
   box-shadow: 0 -6px 18px rgba(15, 23, 42, 0.06);
 }
 
-.iv-mobile-nav button {
+.iv-mobile-nav button,
+.iv-mobile-nav a {
+  text-decoration: none;
   min-height: 56px;
   display: flex;
   flex-direction: column;
@@ -136,9 +175,20 @@
   color: var(--text-muted);
   font-size: 0.63rem;
   font-weight: 600;
+  padding: 0 2px;
+  min-width: 0;
 }
 
-.iv-mobile-nav button.is-active {
+.iv-mobile-nav button > span,
+.iv-mobile-nav a > span {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.iv-mobile-nav button.is-active,
+.iv-mobile-nav a.is-active {
   color: var(--accent);
   border-top-color: var(--accent);
   background: var(--accent-soft);

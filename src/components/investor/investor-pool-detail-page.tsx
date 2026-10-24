@@ -481,7 +481,7 @@ export function InvestorPoolDetailPage({
   const [drawer, setDrawer] = useState<
     "position" | "trades" | "guardian" | null
   >(null);
-  const [activeNav, setActiveNav] = useState<InvestorNavKey>("pools");
+  const [activeNav, setActiveNav] = useState<InvestorNavKey>("detail");
   const [clock, setClock] = useState(initial.asOf);
   const [lastRefresh, setLastRefresh] = useState(initial.asOf);
   const [bookSlots, setBookSlots] = useState(1);
@@ -1471,6 +1471,7 @@ export function InvestorPoolDetailPage({
       walletBalance={data.profile.wallet}
       unread={data.profile.unread}
       activeNav={activeNav}
+      detailHref={`/investor/pools/${overview.id}`}
       quickActions={dockActions}
       onNavigate={scrollTo}
       onOpenDrawer={(tab: InvestorDrawerTab) =>

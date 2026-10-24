@@ -1472,3 +1472,20 @@ Dialogs trap focus, restore it, close on Escape/backdrop and lock body scroll; a
 - Full suite: `node --test tests/*.test.cjs` → 253/253 pass.
 - TypeScript clean; `next build` succeeds with `/investor/pools/[id]` dynamic.
 - Playwright production run verified every lifecycle deep link, all 25 dialogs, all nine wizards through acknowledgement (booking, interest, statement CSV download, payout draft, support), real document/payout downloads, trade drill-down, the three drawer views, watch toggle, compare sorting, the completed-pool dock, light-mode default, zero page errors and zero horizontal overflow at 390 px.
+
+## Investor shell navigation (I-1 / I-2 / I-3 as real routes)
+
+The three built investor pages are separate routes, each with its own page component, stylesheet and data service, and each keeps its own modals, wizards, drawer and dock local to that page. To move between them, `InvestorShell` (`src/components/investor/investor-shell.tsx`) now renders the first nav group — **Investor pages** — as `next/link` anchors instead of buttons:
+
+| Nav entry          | Route             | Code |
+| ------------------ | ----------------- | ---- |
+| Investor overview  | `/investor`       | I-1  |
+| Crowdfunding pools | `/investor/pools` | I-2  |
+| Pool detail        | `detailHref`      | I-3  |
+
+- `detailHref?: string` (default `/investor/pools`) tells the shell which pool the I-3 entry opens. I-1 passes its first active pool, I-2 passes the highlighted/selected pool (falling back through trading, open, upcoming, completed, then `pkg_01`), and I-3 passes its own pool plus `activeNav="detail"`.
+- The remaining groups (**Portfolio**, **Account**) stay in-page actions: they open modals, wizards, the right drawer or scroll to a section on the current page, so no route can trigger a dialog owned by another page.
+- The command palette, the mobile bottom nav (`Overview` / `Pools` / `Detail` / `Portfolio` / `Wallet` / `More`) and the sidebar all use the same links, so a page change always unmounts the previous page's dialogs (verified: opening a dialog on I-1 or I-2 and then navigating leaves zero `.desk-modal` nodes and zero backdrops).
+- Styling is additive in `src/styles/components/investor-shell.css`: `a.op-nav-link` drops underlines, `.op-nav-link--page` keeps button metrics, `.op-nav-code` renders the mono I-1/I-2/I-3 badge (hidden in the collapsed rail), and the mobile nav is a six-column grid with ellipsised labels at 390 px.
+
+Static probes cover the shell props (`tests/investor-shell-nav.test.cjs`); the shell-nav suite adds 11 checks (full suite 264/264), `tsc --noEmit` is clean and `next build` succeeds with all three routes.

@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   createContext,
   useCallback,
@@ -20,6 +21,7 @@ import { cn } from "@/lib/cn";
 export type InvestorNavKey =
   | "overview"
   | "pools"
+  | "detail"
   | "upcoming"
   | "earnings"
   | "activity"
@@ -76,22 +78,52 @@ export function useInvestorChrome() {
 
 const NAV: {
   group: string;
-  items: { key: InvestorNavKey; label: string; icon: IconName }[];
+  items: {
+    key: InvestorNavKey;
+    label: string;
+    icon: IconName;
+    href?: string;
+    code?: string;
+  }[];
 }[] = [
+  {
+    group: "Investor pages",
+    items: [
+      {
+        key: "overview",
+        label: "Investor overview",
+        icon: "gauge",
+        href: "/investor",
+        code: "I-1",
+      },
+      {
+        key: "pools",
+        label: "Crowdfunding pools",
+        icon: "pool",
+        href: "/investor/pools",
+        code: "I-2",
+      },
+      {
+        key: "detail",
+        label: "Pool detail",
+        icon: "package",
+        href: "/investor/pools",
+        code: "I-3",
+      },
+    ],
+  },
   {
     group: "Portfolio",
     items: [
-      { key: "overview", label: "Overview", icon: "gauge" },
-      { key: "pools", label: "Active pools", icon: "pool" },
-      { key: "upcoming", label: "Upcoming pools", icon: "calendar" },
+      { key: "upcoming", label: "Upcoming windows", icon: "calendar" },
       { key: "earnings", label: "Earnings", icon: "trendUp" },
       { key: "activity", label: "Activity", icon: "activity" },
+      { key: "portfolio", label: "My investments", icon: "layers" },
     ],
   },
   {
     group: "Account",
     items: [
-      { key: "portfolio", label: "My investments", icon: "layers" },
       { key: "wallet", label: "Wallet & payouts", icon: "wallet" },
       { key: "calculator", label: "Return calculator", icon: "chart" },
       { key: "notifications", label: "Notifications", icon: "bell" },
@@ -109,6 +141,7 @@ export function InvestorShell({
   walletBalance,
   unread,
   activeNav,
+  detailHref = "/investor/pools",
   quickActions,
   onNavigate,
   onOpenDrawer,
@@ -125,6 +158,7 @@ export function InvestorShell({
   walletBalance: number;
   unread: number;
   activeNav: InvestorNavKey;
+  detailHref?: string;
   quickActions: InvestorQuickAction[];
   onNavigate: (key: InvestorNavKey) => void;
   onOpenDrawer: (tab: InvestorDrawerTab) => void;
@@ -176,6 +210,17 @@ export function InvestorShell({
     return () => document.removeEventListener("keydown", handler);
   }, []);
 
+  const router = useRouter();
+  const navGroups = useMemo(
+    () =>
+      NAV.map((group) => ({
+        ...group,
+        items: group.items.map((item) =>
+          item.key === "detail" ? { ...item, href: detailHref } : item,
+        ),
+      })),
+    [detailHref],
+  );
   const toggleTheme = () => {
     themeStore.write(theme === "light" ? "dark" : "light");
   };
@@ -188,12 +233,12 @@ export function InvestorShell({
   );
   const actions = useMemo(
     () => [
-      ...NAV.flatMap((group) =>
+      ...navGroups.flatMap((group) =>
         group.items.map((item) => ({
           label: item.label,
           hint: group.group,
           icon: item.icon,
-          run: () => navigate(item.key),
+          run: () => (item.href ? router.push(item.href) : navigate(item.key)),
         })),
       ),
       ...quickActions.map((a) => ({
@@ -211,7 +256,7 @@ export function InvestorShell({
         },
       },
     ],
-    [quickActions, navigate, onQuickAction],
+    [navGroups, quickActions, navigate, onQuickAction, router],
   );
   const filtered = actions.filter((a) =>
     `${a.label} ${a.hint}`.toLowerCase().includes(query.trim().toLowerCase()),
@@ -289,28 +334,54 @@ export function InvestorShell({
           </div>
 
           <nav className="op-sidebar__nav">
-            {NAV.map((group) => (
+            {navGroups.map((group) => (
               <div key={group.group} className="op-nav-group">
                 <span className="op-nav-group__label">{group.group}</span>
-                {group.items.map((item) => (
-                  <button
-                    key={item.key}
-                    type="button"
-                    className={cn(
-                      "op-nav-link",
-                      activeNav === item.key && "is-active",
-                    )}
-                    onClick={() => navigate(item.key)}
-                    aria-current={activeNav === item.key ? "page" : undefined}
-                    title={item.label}
-                  >
-                    <Icon name={item.icon} size={17} />
-                    <span className="op-nav-link__text">{item.label}</span>
-                    {item.key === "notifications" && unread > 0 ? (
+                {group.items.map((item) => {
+                  const badge =
+                    item.key === "notifications" && unread > 0 ? (
                       <span className="op-nav-badge mono">{unread}</span>
-                    ) : null}
-                  </button>
-                ))}
+                    ) : item.code ? (
+                      <span className="op-nav-code mono">{item.code}</span>
+                    ) : null;
+                  const content = (
+                    <>
+                      <Icon name={item.icon} size={17} />
+                      <span className="op-nav-link__text">{item.label}</span>
+                      {badge}
+                    </>
+                  );
+                  return item.href ? (
+                    <Link
+                      key={item.key}
+                      href={item.href}
+                      className={cn(
+                        "op-nav-link",
+                        "op-nav-link--page",
+                        activeNav === item.key && "is-active",
+                      )}
+                      onClick={() => setMobileOpen(false)}
+                      aria-current={activeNav === item.key ? "page" : undefined}
+                      title={`${item.label} · ${item.code ?? "page"}`}
+                    >
+                      {content}
+                    </Link>
+                  ) : (
+                    <button
+                      key={item.key}
+                      type="button"
+                      className={cn(
+                        "op-nav-link",
+                        activeNav === item.key && "is-active",
+                      )}
+                      onClick={() => navigate(item.key)}
+                      aria-current={activeNav === item.key ? "page" : undefined}
+                      title={item.label}
+                    >
+                      {content}
+                    </button>
+                  );
+                })}
               </div>
             ))}
           </nav>
@@ -480,8 +551,20 @@ export function InvestorShell({
               key: "overview" as const,
               label: "Overview",
               icon: "gauge" as IconName,
+              href: "/investor",
             },
-            { key: "pools" as const, label: "Pools", icon: "pool" as IconName },
+            {
+              key: "pools" as const,
+              label: "Pools",
+              icon: "pool" as IconName,
+              href: "/investor/pools",
+            },
+            {
+              key: "detail" as const,
+              label: "Detail",
+              icon: "package" as IconName,
+              href: detailHref,
+            },
             {
               key: "portfolio" as const,
               label: "Portfolio",
@@ -492,17 +575,30 @@ export function InvestorShell({
               label: "Wallet",
               icon: "wallet" as IconName,
             },
-          ].map((item) => (
-            <button
-              key={item.key}
-              type="button"
-              className={activeNav === item.key ? "is-active" : ""}
-              onClick={() => navigate(item.key)}
-            >
-              <Icon name={item.icon} size={18} />
-              <span>{item.label}</span>
-            </button>
-          ))}
+          ].map((item) =>
+            item.href ? (
+              <Link
+                key={item.key}
+                href={item.href}
+                className={activeNav === item.key ? "is-active" : ""}
+                onClick={() => setMobileOpen(false)}
+                aria-current={activeNav === item.key ? "page" : undefined}
+              >
+                <Icon name={item.icon} size={18} />
+                <span>{item.label}</span>
+              </Link>
+            ) : (
+              <button
+                key={item.key}
+                type="button"
+                className={activeNav === item.key ? "is-active" : ""}
+                onClick={() => navigate(item.key)}
+              >
+                <Icon name={item.icon} size={18} />
+                <span>{item.label}</span>
+              </button>
+            ),
+          )}
           <button type="button" onClick={() => setMobileOpen(true)}>
             <Icon name="menu" size={18} />
             <span>More</span>

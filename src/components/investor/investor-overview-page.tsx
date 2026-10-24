@@ -1308,6 +1308,7 @@ export function InvestorOverviewPage({
       walletBalance={data.wallet.available}
       unread={unread}
       activeNav={activeNav}
+      detailHref={`/investor/pools/${data.activePools[0]?.id ?? data.upcoming[0]?.id ?? "pkg_01"}`}
       quickActions={quickActions}
       onNavigate={scrollTo}
       onOpenDrawer={(tab) => setDrawer(tab)}
