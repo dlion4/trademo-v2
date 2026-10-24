@@ -1406,7 +1406,7 @@ Invalid commands throw before mutation, so the workspace stays atomic.
 - Compare, pool/trade/Guardian/open/payment/upcoming/completed/payout/roadmap detail views, filters, fees, ledger, help and reminders round out the set; the table view is a real TanStack table (`useDeskTable` with sortable headers), and compare caps the selection at four pools.
 - A three-view right drawer (allocation with per-pool mix, capital, timeline) and six bottom-dock quick actions plus four page-level quick cards — all opening pages, dialogs or wizards.
 - Real downloads: JSON/CSV/PDF statements (jsPDF imported on demand), per-completed-pool payout PDFs and a roadmap export; JSZip-free, fully in-browser.
-- No dead ends: every button opens a dialog or navigates to an existing route (`/investor`, `/investor/calculator`, `/investor/earnings`, `/investor?action=payout`, `/dashboard`), and the ledger merges source rows with local audit entries behind a "local only" toggle.
+- No dead ends: every button opens a dialog or navigates to an existing route (`/investor`, `/investor/calculator`, `/investor/earnings`, `/investor?action=payout`, `/dashboard`), the trading-pool dialog links straight to the full I-3 workspace, and the ledger merges source rows with local audit entries behind a "local only" toggle.
 
 Dialogs trap focus, restore it, close on Escape/backdrop and lock body scroll; anchors use `scroll-margin-top`; the dock hides while a dialog or drawer owns the screen. Motion is limited to a 60 ms card stagger, progress draw and one check-in animation, all disabled under `prefers-reduced-motion`. Layout is 4/2/1 stats, 3/2/1 pool cards, and at 390 px there is no horizontal overflow, wizard steps stay on one line and the card/table toggle remains reachable.
 

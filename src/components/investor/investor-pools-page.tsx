@@ -4162,6 +4162,12 @@ export function InvestorPoolsPage({
                   </div>
                 </div>
                 <div className="ip-actions ip-modal-actions">
+                  <Link
+                    className="ip-btn ip-btn--primary"
+                    href={`/investor/pools/${modalTrading.id}`}
+                  >
+                    Full workspace <Icon name="arrowRight" size={13} />
+                  </Link>
                   <button
                     type="button"
                     className="ip-btn"
@@ -4188,7 +4194,7 @@ export function InvestorPoolsPage({
                   </button>
                   <button
                     type="button"
-                    className="ip-btn ip-btn--primary"
+                    className="ip-btn"
                     onClick={() => open("fees")}
                   >
                     Fee economics
