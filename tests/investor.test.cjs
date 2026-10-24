@@ -64,7 +64,7 @@ test("active pools carry the spec allocation, progress and Guardian state", () =
   const [basic, aggressive] = w.activePools;
   assert.equal(basic.code, "PKG-01");
   assert.equal(basic.name, "Basic Growth");
-  assert.equal(basic.raised, 35000);
+  assert.equal(basic.raised, 36000);
   assert.equal(basic.goal, 50000);
   assert.equal(basic.investment, 15000);
   assert.equal(basic.userSlots, 5);

@@ -1364,7 +1364,7 @@ Dialog layers trap focus, restore it, close on Escape/backdrop and lock body scr
 
 ### Page, shell and structured state
 
-`src/app/investor/pools/page.tsx` is a server component that renders `getPoolsWorkspace()` into `InvestorPoolsPage` (`src/components/investor/investor-pools-page.tsx`, client) with the shared `InvestorShell`, so the sidebar, telemetry bar, dock and theme toggle are identical to I-1. It accepts `?pool=<id|code>` and `?action=<book|reminder|prebook|statement|compare|calculator|risk|support|fees|roadmap>`, which open the matching dialog on first paint. `/investor/pools/[id]` is a permalink bridge: known ids (case-insensitive codes included) redirect to `?pool=`, unknown ids fall back to the plain register instead of a 404.
+`src/app/investor/pools/page.tsx` is a server component that renders `getPoolsWorkspace()` into `InvestorPoolsPage` (`src/components/investor/investor-pools-page.tsx`, client) with the shared `InvestorShell`, so the sidebar, telemetry bar, dock and theme toggle are identical to I-1. It accepts `?pool=<id|code>` and `?action=<book|reminder|prebook|statement|compare|calculator|risk|support|fees|roadmap>`, which open the matching dialog on first paint. `/investor/pools/[id]` now renders the I-3 detail page (see below); the register itself is still reachable from that page's breadcrumb, header and footer links.
 
 `src/lib/investor/pools.ts` is the single source of truth — a deterministic `POOLS_AS_OF = 2026-10-23T10:00:00Z` snapshot typed as `PoolsWorkspace`:
 
@@ -1416,3 +1416,59 @@ Dialogs trap focus, restore it, close on Escape/backdrop and lock body scroll; a
 - Full suite: `node --test tests/*.test.cjs` → 221/221 pass.
 - TypeScript clean; `next build` succeeds; the whole register renders from server props with no client fetch on first paint.
 - Playwright production run verified all routes and API projections, the six sections, all 25 dialogs with their visible controls, all eight wizards through acknowledgement, the three drawer tabs, compare/filters/table views, deep links (`?pool=` across every lifecycle, `?action=`) and the permalink bridge, light-mode default, zero console or page errors, and a 390 px layout with no horizontal overflow.
+
+## I-3 · Pool Detail (`/investor/pools/[id]`)
+
+### Page, shell and structured state
+
+`src/app/investor/pools/[id]/page.tsx` is a server component that resolves the pool through `getPoolDetailWorkspace(id)` and renders `InvestorPoolDetailPage` (`src/components/investor/investor-pool-detail-page.tsx`, client) inside the shared `InvestorShell`, so sidebar, telemetry bar, dock and theme toggle stay identical to I-1/I-2. It accepts `pkg_02` or `PKG-02` (case-insensitive) plus `?action=`/`?tab=` deep links (`book`, `payout`, `statement`, `reminder`, `alerts`, `projection`, `risk`, `support`, `trades`, `guardian`, `participants`, `documents`, `activity`, `schedule`, `compare`, `share`, `interest`, `overview`, `performance`, `fees`, `payoutRecord`, `help`), which open the matching dialog on first paint. Unknown ids return the standard 404 instead of silently redirecting.
+
+`src/lib/investor/pool-detail.ts` is the single source of truth — a deterministic `POOL_DETAIL_AS_OF = 2026-10-23T10:00:00Z` snapshot typed as `PoolDetailWorkspace`:
+
+- `overview` (code, lifecycle, strategy, thesis, markets, risk band, manager, booking/trading windows, profit-share date, goal/raised, slot price and fill, investors, profit share %, settlement batch, Guardian summary).
+- `investment` (slots, capital, capital share, token allocation, pool P&L, gross, platform cut %, cut, net, ROI, paid, drafted, refresh cadence and 14 dated daily rows) or `null`, plus `booking` (slots, amount, payment state, reference, available headroom) and `interest`.
+- `performance` (total P&L, wins/losses/open, win rate, max drawdown with date, Guardian triggers, recovery label, average duration, best/worst trade with the investor's share, 15-point equity curve, benchmarks) or `null` for pools that have not traded.
+- `guardian` (status, streak, policy limits, rotation, triggers, recovery, four typed events), `participants` (aggregate + anonymised rows, tail, capital bands, publish gate), `trades`, `events`, `documents`, `schedule`, `related`, `watching`, `preferences`, `reminders`, `payouts`, `projections`, `support`, `audit` and `profile`.
+- `projection` publishes the desk's expected return for pools without a settled position.
+
+Selectors (`detailFillPct`, `capitalSharePct`, `tradingElapsedPct`, `hoursUntil`, `countdownFrom`, `relativeTo`, `sumDaily`, `roiOn`, `drawdownHeadroom`, `durationLabel`, `withdrawableNet`) keep every derived figure out of the component, so a backend payload can replace the fixture without touching the view layer. Fixtures reconcile with I-1/I-2: `pkg_01` is 36,000 raised on a 50,000 goal (12 of 25 slots), the investor's 15,000 is a 41.7% share, 1,260 gross becomes 1,008 net after the 20% platform cut (6.72% ROI), and every pool's participant rows plus tail sum to committed capital.
+
+### Read contract
+
+`src/server/services/investor-pool-detail-service.ts` assembles the workspace from the I-2 pool book plus per-pool detail seeds, returns a fresh object per call, and exports `listPoolDetailIds()`.
+
+`GET /api/investor/pools/:id?section=<workspace|overview|investment|performance|guardian|participants|trades|schedule|documents|events>` is a strict read-only projection: an unknown section or duplicate query parameter returns `400`, an unknown pool returns `404`, every response is `Cache-Control: no-store`, and there is no write handler, so mutations return `405`.
+
+`src/lib/investor/use-pool-detail.ts` caches under `["pools", poolId, "workspace"]` with the server snapshot as `initialData`, so the page paints from structured props and never blocks on a fetch.
+
+### Commands and local authority
+
+`poolDetailCommandSchema` is a Zod discriminated union over ten commands, applied to a clone with a new revision and an audit entry (capped at 40). Every mutation is session-only and the UI says so:
+
+- `refreshDetail` (manual/auto) re-reads the snapshot clock, refuses automatic runs when `preferences.autoRefresh` is off and never changes provider data.
+- `bookSlots` (1–10) requires an open pool, checks the per-investor headroom and the remaining target, raises raised/slots filled, marks payment `pending` and writes a local booking hold.
+- `draftPayout` (min 100) cannot exceed `withdrawableNet`; it appends a draft and raises `pendingPayout` without moving money.
+- `setReminder` rejects duplicates, lead times longer than the pool's own window and completed cycles.
+- `savePreferences` requires at least one channel; `saveProjection` stores newest-first and caps at ten; `prebookInterest` is limited to upcoming pools, once per pool and to `slotsTotal / investors`.
+- `setWatch`, `support` (12-char minimum, `local_draft`) and `recordExport` log local state only.
+
+Invalid commands throw before mutation, so the workspace stays atomic.
+
+### UI surface
+
+`src/styles/pages/investor-pool-detail.css` is scoped under `.page-investor-pool-detail` and continues the I-1/I-2 light palette (one `--accent`, hairline borders, tabular numerics, no gradients anywhere). The page renders a breadcrumb + lifecycle/risk header with lifecycle-aware primary CTA, a source banner with refresh countdown, then eight numbered sections: **01** pool overview (facts, funding progress, booking/trading/profit-share windows, trading elapsed, Guardian card, timeline), **02** your investment (position or booking/expected-at-minimum, 14-day live earnings histogram), **03** performance (six KPIs, equity curve, benchmarks, best/worst), **04** AI Guardian (policy gauge, settings, trigger history), **05** participants (aggregate stats, capital bands, sortable TanStack table with a publish gate), **06** documents (in-browser PDF/CSV/JSON downloads plus queued reminders and payout drafts), **07** activity ledger (source events merged with local commands, local-only filter), **08** related cycles, four quick-action cards and six secondary links.
+
+- **25 dialog kinds**, of which **9 are three-step wizards** (book slots, payout, statement, reminder, alert preferences, projection, risk acknowledgement, support, register interest), each with a required acknowledgement before the command runs.
+- Read-only surfaces: overview method, timeline, earnings attribution, performance method, trade ledger with filters, trade settlement drill-down, Guardian history/policy, participants, fees, payout record, document centre, activity log, compare table (sortable TanStack), share permalink with clipboard copy, and workspace boundaries.
+- A three-view right drawer (position, trades, Guardian) and a six-action bottom dock (`Open now`/`Book slots`/`Register interest` by lifecycle) plus four page-level quick cards — every one opens a dialog, wizard or existing route.
+- Real downloads: statements in PDF/CSV/JSON, factsheet/policy/statement/ledger documents and payout-record PDFs, all generated in-browser from the same snapshot and logged in the ledger.
+- No dead ends: completed cycles route the dock to the pool register and the reminder action to the timeline, deep links seed wizard defaults (including the payout amount), and footer links resolve to `/investor/pools`, `/investor/calculator`, `/investor/wallet` and `/dashboard`.
+
+Dialogs trap focus, restore it, close on Escape/backdrop and lock body scroll; anchors use `scroll-margin-top`; the dock hides while a dialog or drawer owns the screen; wizard chrome keeps all three steps on one line at 390 px. Layout is 6/3/2 KPI columns, 2/1 performance, Guardian and participant grids, and a 4/2/1 quick-action grid; the mobile page clears the bottom nav with 84 px of padding and has no horizontal overflow.
+
+### Validation record
+
+- `node --test tests/investor-pool-detail.test.cjs`: 32 tests covering id/code resolution and 404s, the fixture contract for trading/open/upcoming/completed pools, investment/profit-share reconciliation, performance and Guardian consistency, participant reconciliation for all nine pools, selector clamping, countdown/relative labels, the ten-command schema, immutability, booking/payout/reminder/interest/projection/preference/support/export branches, the audit cap, and static wiring of the API route, page route, component and stylesheet.
+- Full suite: `node --test tests/*.test.cjs` → 253/253 pass.
+- TypeScript clean; `next build` succeeds with `/investor/pools/[id]` dynamic.
+- Playwright production run verified every lifecycle deep link, all 25 dialogs, all nine wizards through acknowledgement (booking, interest, statement CSV download, payout draft, support), real document/payout downloads, trade drill-down, the three drawer views, watch toggle, compare sorting, the completed-pool dock, light-mode default, zero page errors and zero horizontal overflow at 390 px.

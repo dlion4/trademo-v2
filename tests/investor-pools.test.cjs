@@ -74,7 +74,7 @@ test("trading pools expose allocation, share and Guardian limits", () => {
   const [basic, aggressive] = w.trading;
   assert.equal(basic.code, "PKG-01");
   assert.equal(basic.goal, 50000);
-  assert.equal(basic.raised, 35000);
+  assert.equal(basic.raised, 36000);
   assert.equal(basic.slotsFilled, 12);
   assert.equal(basic.slotsTotal, 25);
   assert.equal(basic.userSlots, 5);

@@ -1,35 +1,35 @@
 import type { Metadata } from "next";
-import { redirect } from "next/navigation";
+import { notFound } from "next/navigation";
 
-import { getPoolsWorkspace } from "@/server/services/investor-pools-service";
+import { InvestorPoolDetailPage } from "@/components/investor/investor-pool-detail-page";
+import { getPoolDetailWorkspace } from "@/server/services/investor-pool-detail-service";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = { title: "Pool detail · Investor · tradeMO" };
+export const metadata: Metadata = {
+  title: "Pool detail (I-3) · Investor · tradeMO",
+  description:
+    "Investor pool detail workspace: funding progress, your position and live earnings attribution, pool performance, AI Guardian policy, participants, documents, activity ledger, statements, payout drafts and projections.",
+};
 
 /**
- * Permalink bridge for pool detail (`/investor/pools/pkg_02`, `/investor/pools/PKG-02`).
- * I-2 renders the detail dialog from a `?pool=` query so the register stays a
- * single server component; ids that are not in the investor book fall back to
- * the plain register rather than a 404.
+ * Page I-3 — Pool Detail (/investor/pools/:id).
+ * Accepts the numeric id (`pkg_02`) or the public code (`PKG-02`). Unknown ids
+ * return the standard 404 rather than redirecting to the register.
  */
-export default async function InvestorPoolDetailPage({
+export default async function PoolDetailPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ action?: string; tab?: string }>;
 }) {
   const { id } = await params;
-  const workspace = getPoolsWorkspace();
-  const known = [
-    ...workspace.trading,
-    ...workspace.open,
-    ...workspace.upcoming,
-    ...workspace.completed,
-  ].some((p) => p.id === id || p.code.toLowerCase() === id.toLowerCase());
+  const { action, tab } = await searchParams;
+  const workspace = getPoolDetailWorkspace(id);
+  if (!workspace) notFound();
 
-  redirect(
-    known
-      ? `/investor/pools?pool=${encodeURIComponent(id)}`
-      : "/investor/pools",
+  return (
+    <InvestorPoolDetailPage initial={workspace} initialAction={action ?? tab} />
   );
 }

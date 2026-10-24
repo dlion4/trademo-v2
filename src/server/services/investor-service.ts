@@ -15,7 +15,7 @@ const activePools: ActivePool[] = [
     name: "Basic Growth",
     status: "trading",
     goal: 50000,
-    raised: 35000,
+    raised: 36000,
     slotPrice: 3000,
     userSlots: 5,
     investment: 15000,

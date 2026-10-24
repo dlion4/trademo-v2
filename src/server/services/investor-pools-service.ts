@@ -42,7 +42,7 @@ const trading: TradingPool[] = [
     markets: ["R_10", "R_50", "R_100"],
     riskBand: "Balanced",
     goal: 50000,
-    raised: 35000,
+    raised: 36000,
     slotPrice: 3000,
     slotsFilled: 12,
     slotsTotal: 25,
