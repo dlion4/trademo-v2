@@ -1,0 +1,414 @@
+/* ══ tradeMO · Investor Desk shell — shared by I-1…I-12 ══ */
+.iv-shell .op-main {
+  padding: 20px 22px 92px;
+}
+
+.iv-account {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 12px 0;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+}
+
+.iv-account > div {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.iv-account strong {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.iv-account span:not(.iv-avatar) {
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+.iv-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  display: grid;
+  place-items: center;
+  background: var(--accent-soft);
+  border: 1px solid var(--accent-border);
+  color: var(--accent);
+  font-size: 0.72rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.iv-book-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+  text-align: left;
+}
+
+.iv-book-card span {
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.iv-book-card strong {
+  font-size: 1.05rem;
+  color: var(--text-primary);
+}
+
+.iv-book-card small {
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+}
+
+.iv-book-card:hover {
+  border-color: var(--border-strong);
+  background: var(--surface-sunken);
+}
+
+.iv-topbar__metrics {
+  align-items: center;
+  gap: 14px;
+  margin-right: 6px;
+  padding-right: 14px;
+  border-right: 1px solid var(--border);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.iv-topbar__metrics strong {
+  color: var(--text-primary);
+  font-weight: 600;
+  margin-left: 4px;
+}
+
+.iv-bell {
+  position: relative;
+}
+
+.iv-bottom-dock {
+  padding: 8px 18px;
+}
+
+/* Page entries in the sidebar: real links to I-1 / I-2 / I-3. */
+
+a.op-nav-link {
+  text-decoration: none;
+}
+
+.op-nav-link--page {
+  font-weight: 600;
+}
+
+.op-nav-link--page .op-nav-link__text {
+  font-weight: 600;
+}
+
+.op-nav-code {
+  margin-left: auto;
+  padding: 0.04rem 0.34rem;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  background: var(--surface);
+  color: var(--text-muted);
+  font-size: 0.6rem;
+  font-weight: 650;
+  letter-spacing: 0.04em;
+  line-height: 1.5;
+}
+
+.op-nav-link--page.is-active .op-nav-code {
+  border-color: var(--accent-border);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.op-shell.is-rail .op-nav-code {
+  display: none;
+}
+
+.iv-mobile-nav {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1040;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  background: var(--surface);
+  border-top: 1px solid var(--border-strong);
+  padding-bottom: env(safe-area-inset-bottom);
+  box-shadow: 0 -6px 18px rgba(15, 23, 42, 0.06);
+}
+
+.iv-mobile-nav button,
+.iv-mobile-nav a {
+  text-decoration: none;
+  min-height: 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  border: 0;
+  border-top: 2px solid transparent;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.63rem;
+  font-weight: 600;
+  padding: 0 2px;
+  min-width: 0;
+}
+
+.iv-mobile-nav button > span,
+.iv-mobile-nav a > span {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.iv-mobile-nav button.is-active,
+.iv-mobile-nav a.is-active {
+  color: var(--accent);
+  border-top-color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.iv-toasts {
+  position: fixed;
+  right: 18px;
+  bottom: 76px;
+  z-index: 1070;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: min(380px, calc(100vw - 28px));
+  pointer-events: none;
+}
+
+.iv-toast {
+  display: flex;
+  gap: 9px;
+  align-items: flex-start;
+  padding: 11px 12px;
+  border: 1px solid var(--border-strong);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-lift);
+  pointer-events: auto;
+  animation: fadeSlideUp 180ms var(--ease-out) both;
+}
+
+.iv-toast.is-error {
+  border-left-color: var(--loss);
+}
+.iv-toast.is-warning {
+  border-left-color: var(--warning);
+}
+.iv-toast.is-info {
+  border-left-color: var(--info);
+}
+
+.iv-toast > div {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.iv-toast strong {
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+.iv-toast span {
+  font-size: 0.72rem;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.iv-toast button {
+  border: 0;
+  background: transparent;
+  color: var(--text-muted);
+  padding: 2px;
+}
+
+.iv-palette-layer .iv-palette-input {
+  min-height: 42px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  font-size: 0.9rem;
+  background: var(--surface);
+  color: var(--text-primary);
+}
+
+.iv-palette-list {
+  margin-top: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+.iv-palette-list button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 12px;
+  border: 0;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  text-align: left;
+  font-size: 0.82rem;
+  color: var(--text-primary);
+}
+
+.iv-palette-list button:last-child {
+  border-bottom: 0;
+}
+
+.iv-palette-list button:hover {
+  background: var(--surface-2);
+}
+
+.iv-palette-list small {
+  margin-left: auto;
+  color: var(--text-muted);
+  font-size: 0.68rem;
+}
+
+.iv-palette-hint {
+  margin-right: auto;
+  font-size: 0.68rem;
+  color: var(--text-muted);
+}
+
+.iv-empty {
+  padding: 18px;
+  margin: 0;
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+@media (max-width: 991.98px) {
+  .iv-shell .op-main {
+    padding: 16px 14px calc(76px + env(safe-area-inset-bottom));
+  }
+  .iv-bottom-dock {
+    display: none;
+  }
+  .iv-toasts {
+    bottom: calc(72px + env(safe-area-inset-bottom));
+  }
+  .iv-shell.is-rail .op-sidebar {
+    width: 268px;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .iv-toasts {
+    left: 12px;
+    right: 12px;
+    max-width: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .iv-shell *,
+  .iv-shell *::before,
+  .iv-shell *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ── Compact topbar: the search affordance collapses to an icon so the
+   notification, inspector, theme and profile controls never collide. ── */
+@media (max-width: 767.98px) {
+  .iv-topbar {
+    padding: 7px 12px;
+    gap: 8px;
+  }
+
+  .iv-topbar .op-cmd-search {
+    width: 36px;
+    max-width: 36px;
+    padding: 0;
+    justify-content: center;
+    flex: 0 0 36px;
+  }
+
+  .iv-topbar .op-cmd-search span,
+  .iv-topbar .op-cmd-search kbd {
+    display: none;
+  }
+
+  .iv-topbar .op-topbar__left {
+    flex: 0 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .iv-topbar .op-topbar__right {
+    margin-left: auto;
+    gap: 6px;
+  }
+
+  .iv-topbar .desk-icon-btn {
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* The investor rail becomes a slide-over on small screens; it must sit above
+   both the mobile tab bar and the sticky topbar while open. */
+@media (max-width: 991.98px) {
+  .iv-shell .op-sidebar {
+    z-index: 1060;
+    box-shadow: 0 18px 44px rgba(15, 23, 42, 0.18);
+  }
+
+  .iv-shell .op-sidebar:not(.is-open) {
+    box-shadow: none;
+  }
+
+  .iv-shell .op-mobile-backdrop {
+    z-index: 1050;
+    backdrop-filter: blur(1px);
+  }
+
+  .iv-shell .iv-mobile-nav {
+    z-index: 1030;
+  }
+
+  .iv-shell .iv-topbar {
+    z-index: 1025;
+  }
+}
