@@ -42,11 +42,11 @@ test("page nav entries render as next/link anchors with the page modifier and co
 test("detailHref defaults to the pool register and overrides only the detail entry", () => {
   assert.match(shell, /detailHref = "\/investor\/pools",/);
   assert.match(shell, /detailHref\?: string;/);
-  assert.match(
-    shell,
-    /item\.key === "detail" \? \{ \.\.\.item, href: detailHref \} : item/,
-  );
-  assert.match(shell, /\[detailHref\],/);
+  assert.match(shell, /item\.key === "detail"/);
+  assert.match(shell, /href: detailHref/);
+  assert.match(shell, /item\.key === "book"/);
+  assert.match(shell, /href: bookHref/);
+  assert.match(shell, /\[detailHref, bookHref\],/);
 });
 
 test("non-page nav entries stay in-page actions", () => {

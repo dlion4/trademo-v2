@@ -1489,3 +1489,33 @@ The three built investor pages are separate routes, each with its own page compo
 - Styling is additive in `src/styles/components/investor-shell.css`: `a.op-nav-link` drops underlines, `.op-nav-link--page` keeps button metrics, `.op-nav-code` renders the mono I-1/I-2/I-3 badge (hidden in the collapsed rail), and the mobile nav is a six-column grid with ellipsised labels at 390 px.
 
 Static probes cover the shell props (`tests/investor-shell-nav.test.cjs`); the shell-nav suite adds 11 checks (full suite 264/264), `tsc --noEmit` is clean and `next build` succeeds with all three routes.
+
+## I-4 · Pool Booking & Payment (`/investor/pools/[id]/book`)
+
+Route `src/app/investor/pools/[id]/book/page.tsx` (`force-dynamic`) renders `InvestorPoolBookingPage` and resolves the pool by id or public code (`pkg_02` / `PKG-02`); unknown ids 404 while pools outside an open window still render with a blocked-state hand-off instead of dead-ending.
+
+### Data layer
+
+- `src/lib/investor/pool-booking.ts` — the `PoolBookingWorkspace` DTO: pool window facts, existing booking, five payment rails (`wallet`, `bank_transfer`, `mobile_money`, `card`, `crypto`) with their required field specs, escrow coordinates, three declarations, reservation records, history, saved instruments and local drafts. Selectors (`slotsForYou`, `bookingTotals`, `feeFor`, `totalDue`, `walletShortfall`, `bookingStageRows`, `reservationWindow`) drive every number in the UI.
+- `bookingDraftError()` is the single validation source for the review step, and `buildBookingPayload()` emits exactly the `POST /api/investments` body from the spec (pool, slots, method, rail-specific details, three term flags, amount, fee, total).
+- `applyBookingCommand()` validates a ten-command discriminated union and returns an immutable, audited clone: `refreshBooking`, `createBooking`, `advanceBooking` (received → verified → confirmed), `cancelBooking`, `acknowledge`, `topUpWallet`, `saveProjection`, `saveReferral`, `support`, `recordExport`. Nothing charges a card, moves escrow or confirms a slot with a provider.
+- `src/server/services/investor-pool-booking-service.ts` builds the fixture from the same pool book as I-2/I-3, so slot prices, targets, raised capital, durations and participant counts agree across the three pages.
+- `src/lib/investor/use-pool-booking.ts` keeps the specified TanStack Query keys — `["pools", id, "booking-context"]`, `["investments", "my-bookings", id]`, `["investments", bookingId, "status"]` — so a backend can split the read without touching the view.
+- `src/app/api/investor/pools/[id]/book/route.ts` is a read-only projection with a `section` filter (`workspace`, `pool`, `profile`, `existing`, `methods`, `escrow`, `terms`, `records`, `history`, `savedMethods`); writes stay explicit backend integrations (mutation attempts return 405).
+
+### UI surface
+
+`src/styles/pages/investor-pool-booking.css` is scoped under `.page-investor-pool-booking` and continues the I-1/I-2/I-3 palette (one accent, hairline borders, tabular numerics, no gradients). A five-step stepper (horizontal at md+, stacked at sm, with a progress fill) fronts the five spec sections: **01** pool details (status, closing countdown with icon-pulse under 24 h, min/max slots, availability, target/raised progress, current bookings, window calendar, Guardian note), **02** select slots (`+`/`−` picker with hover-lift, quick counts incl. max, live investment/token/share/fee/total maths, current vs after-booking vs headroom panels), **03** payment method (staggered selectable rail cards with selected-lift and a wallet-shortfall flag, per-rail forms with inline validation, saved-account prefill), **04** review & confirm (order summary, escrow instructions with copy/download, three term declarations, guard message, confirm), **05** payment status (five-stage tracker with icon-spin on pending and check-draw on done, 72-hour reservation countdown, receipt, simulated operator steps, cancellation), plus a source banner, local-command ledger and six-link footer.
+
+- **21 dialog kinds**, of which **six are three-step wizards** (risk disclosure, support, cancellation, wallet top-up, projection, referral), each with a required acknowledgement before the command runs.
+- Read-only surfaces: terms, lock-up/early exit, fees by rail, 72-hour hold policy, rails & limits, escrow coordinates, KYC & funds source, order summary, after-payment timeline, booking history (sortable TanStack table with search and export), receipt, reservation timeline, share link, workspace boundaries.
+- A three-view right drawer (summary, tracker, fees) and a six-action bottom dock (`Slots`, `Method`, `Order`, `Receipt`, `Support`, `Pools`) — every one opens a dialog, wizard, section or existing route.
+- Real downloads: order summary, payment instructions, receipt and booking history in PDF/CSV/JSON, generated in-browser from the same snapshot and logged as exports.
+- No dead ends: blocked windows explain themselves and route to the pool detail page or the register, I-3's book-slot wizard links here, I-2's booking wizard links here, and the shell gains an **I-4 Book & pay** nav entry (`bookHref`).
+
+### Validation record
+
+- `node --test tests/investor-pool-booking.test.cjs`: 31 tests covering id/code resolution, the spec's headline figures, lifecycle gating, cross-page participant reconciliation, rail fees and field specs, wallet coverage rules, slot maths and the specification's 3-slot sample ($15,000 / 15,000 bmX / 34.88% / 5 slots after), per-field validation, every draft guard, the `POST /api/investments` payload, tracker states for pending/confirmed/cancelled records, the reservation window, all ten commands with their failure branches, audit capping, deterministic references, and static wiring of the route, API, component and stylesheet.
+- Full suite: `node --test tests/*.test.cjs` → 295/295 pass.
+- TypeScript clean; `next build` succeeds with `/investor/pools/[id]/book` dynamic.
+- Playwright production run verified all nine pools (id and code), the blocked states for trading/upcoming/completed windows, every section and dialog, all six wizards through acknowledgement, the wallet shortfall and top-up draft, the full booking → received → verified → confirmed path, cancellation, receipt PDF download, mobile nav at 390 px (six columns, no overflow), zero page errors and zero horizontal overflow.

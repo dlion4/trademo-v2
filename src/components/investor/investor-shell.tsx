@@ -22,6 +22,7 @@ export type InvestorNavKey =
   | "overview"
   | "pools"
   | "detail"
+  | "book"
   | "upcoming"
   | "earnings"
   | "activity"
@@ -110,6 +111,12 @@ const NAV: {
         href: "/investor/pools",
         code: "I-3",
       },
+      {
+        key: "book",
+        label: "Book & pay",
+        icon: "lock",
+        code: "I-4",
+      },
     ],
   },
   {
@@ -142,6 +149,7 @@ export function InvestorShell({
   unread,
   activeNav,
   detailHref = "/investor/pools",
+  bookHref,
   quickActions,
   onNavigate,
   onOpenDrawer,
@@ -159,6 +167,8 @@ export function InvestorShell({
   unread: number;
   activeNav: InvestorNavKey;
   detailHref?: string;
+  /** Enables the I-4 “Book & pay” entry; only supplied when a window is open. */
+  bookHref?: string;
   quickActions: InvestorQuickAction[];
   onNavigate: (key: InvestorNavKey) => void;
   onOpenDrawer: (tab: InvestorDrawerTab) => void;
@@ -215,11 +225,17 @@ export function InvestorShell({
     () =>
       NAV.map((group) => ({
         ...group,
-        items: group.items.map((item) =>
-          item.key === "detail" ? { ...item, href: detailHref } : item,
-        ),
+        items: group.items
+          .map((item) =>
+            item.key === "detail"
+              ? { ...item, href: detailHref }
+              : item.key === "book"
+                ? { ...item, href: bookHref }
+                : item,
+          )
+          .filter((item) => item.key !== "book" || Boolean(item.href)),
       })),
-    [detailHref],
+    [detailHref, bookHref],
   );
   const toggleTheme = () => {
     themeStore.write(theme === "light" ? "dark" : "light");
