@@ -133,7 +133,13 @@ const NAV: {
       { key: "upcoming", label: "Upcoming windows", icon: "calendar" },
       { key: "earnings", label: "Earnings", icon: "trendUp" },
       { key: "activity", label: "Activity", icon: "activity" },
-      { key: "portfolio", label: "My investments", icon: "layers" },
+      {
+        key: "portfolio",
+        label: "My investments",
+        icon: "layers",
+        href: "/investor/investments",
+        code: "I-6",
+      },
     ],
   },
   {
@@ -593,6 +599,7 @@ export function InvestorShell({
               key: "portfolio" as const,
               label: "Portfolio",
               icon: "layers" as IconName,
+              href: "/investor/investments",
             },
             {
               key: "wallet" as const,

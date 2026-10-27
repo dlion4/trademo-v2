@@ -52,8 +52,18 @@ test("detailHref defaults to the pool register and overrides only the detail ent
 test("non-page nav entries stay in-page actions", () => {
   const group = shell.slice(shell.indexOf('group: "Portfolio"'));
   const block = group.slice(0, group.indexOf("];"));
-  assert.doesNotMatch(block, /href:/);
-  assert.doesNotMatch(block, /code:/);
+  // "My investments" became its own route in I-6; every other Portfolio entry
+  // must remain an in-page action with no href and no page code.
+  const withoutPortfolio = block
+    .split("\n")
+    .filter((line) => !line.includes("href:") && !line.includes("code:"))
+    .join("\n");
+  assert.doesNotMatch(withoutPortfolio, /href:/);
+  assert.doesNotMatch(withoutPortfolio, /code:/);
+  assert.match(
+    block,
+    /key: "portfolio"[\s\S]*?href: "\/investor\/investments"/,
+  );
   assert.match(shell, /onClick=\{\(\) => navigate\(item\.key\)\}/);
 });
 
