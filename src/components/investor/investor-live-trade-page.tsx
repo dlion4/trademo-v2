@@ -1897,6 +1897,68 @@ export function InvestorLiveTradePage({
                         </button>
                       ))}
                     </div>
+                    <h4 className="lt-subhead">Recent closes</h4>
+                    <ul className="lt-drawer-feed">
+                      {data.feed.slice(0, 3).map((row) => (
+                        <li key={row.tradeId}>
+                          <button
+                            type="button"
+                            onClick={() => openTrade(row.tradeId)}
+                          >
+                            <span
+                              className={`lt-drawer-feed__dot ${row.isWin ? "is-win" : "is-loss"}`}
+                            />
+                            <span>
+                              <b className="mono">{row.symbol}</b>{" "}
+                              {row.contractLabel}
+                              <small>
+                                {row.poolCode} · {row.botName} ·{" "}
+                                {clockOf(row.soldAt)}
+                              </small>
+                            </span>
+                            <b
+                              className={`mono ${row.isWin ? "is-pos" : "is-neg"}`}
+                            >
+                              {signedMoney(row.yourShareNet, 2)}
+                            </b>
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                    <h4 className="lt-subhead">
+                      Guardian · {openAlerts.length} open
+                    </h4>
+                    <ul className="lt-drawer-alerts">
+                      {openAlerts.length ? (
+                        openAlerts.slice(0, 3).map((row) => (
+                          <li key={row.id} className={levelTone(row.level)}>
+                            <span
+                              className={`lt-alert__level ${levelTone(row.level)}`}
+                            >
+                              {guardianLabel(row.level)}
+                            </span>
+                            <div>
+                              <b>{row.title}</b>
+                              <small className="mono">
+                                {row.poolCode} · {clockOf(row.at)} UTC
+                              </small>
+                            </div>
+                            <button
+                              type="button"
+                              className="lt-link"
+                              onClick={() => openAlert(row.id)}
+                            >
+                              Open
+                            </button>
+                          </li>
+                        ))
+                      ) : (
+                        <li className="lt-drawer-alerts__empty">
+                          Nothing open — Guardian has not paused anything since
+                          the last batch.
+                        </li>
+                      )}
+                    </ul>
                     <div className="lt-drawer-actions">
                       <button
                         type="button"

@@ -2815,3 +2815,63 @@
     line-height: 1.2;
   }
 }
+
+/* ── Drawer overview extras ── */
+
+.page-investor-live .lt-drawer-alerts {
+  list-style: none;
+  margin: 0 0 4px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.page-investor-live .lt-drawer-alerts li {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  padding: 7px 9px;
+  border-bottom: 1px solid var(--border-subtle);
+  border-left: 2px solid transparent;
+  background: var(--surface);
+}
+
+.page-investor-live .lt-drawer-alerts li:last-child {
+  border-bottom: 0;
+}
+
+.page-investor-live .lt-drawer-alerts li.is-watch {
+  border-left-color: var(--warning);
+}
+
+.page-investor-live .lt-drawer-alerts li.is-alert {
+  border-left-color: var(--loss);
+}
+
+.page-investor-live .lt-drawer-alerts li > div {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.page-investor-live .lt-drawer-alerts b {
+  font-size: 9.5px;
+  color: var(--text-primary);
+  line-height: 1.35;
+}
+
+.page-investor-live .lt-drawer-alerts small {
+  color: var(--text-muted);
+  font-size: 8.5px;
+}
+
+.page-investor-live .lt-drawer-alerts__empty {
+  display: block;
+  padding: 10px;
+  color: var(--text-muted);
+  font-size: 9.5px;
+  line-height: 1.5;
+}
