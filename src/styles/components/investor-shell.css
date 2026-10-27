@@ -125,6 +125,7 @@ a.op-nav-link {
 
 .op-nav-code {
   margin-left: auto;
+  flex: 0 0 auto;
   padding: 0.04rem 0.34rem;
   border: 1px solid var(--border);
   border-radius: 3px;

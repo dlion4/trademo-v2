@@ -23,6 +23,7 @@ export type InvestorNavKey =
   | "pools"
   | "detail"
   | "book"
+  | "live"
   | "upcoming"
   | "earnings"
   | "activity"
@@ -116,6 +117,13 @@ const NAV: {
         label: "Book & pay",
         icon: "lock",
         code: "I-4",
+      },
+      {
+        key: "live",
+        label: "Live trade tracker",
+        icon: "activity",
+        href: "/investor/live",
+        code: "I-5",
       },
     ],
   },
