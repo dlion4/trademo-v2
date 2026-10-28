@@ -2189,6 +2189,9 @@ export function InvestorPoolsPage({
       walletBalance={data.summary.wallet}
       unread={data.summary.unread}
       activeNav={activeNav}
+      bookHref={
+        data.open[0] ? `/investor/pools/${data.open[0].id}/book` : undefined
+      }
       detailHref={`/investor/pools/${
         (modal?.kind === "poolDetail" ? modal.id : undefined) ??
         data.trading[0]?.id ??
@@ -3298,6 +3301,16 @@ export function InvestorPoolsPage({
                         setStep(1);
                       }}
                     />
+                  ) : null}
+                  {bookPool ? (
+                    <div className="ip-modal-links">
+                      <Link
+                        className="ip-link"
+                        href={`/investor/pools/${bookPool.id}/book`}
+                      >
+                        Open the full booking &amp; payment page ↗
+                      </Link>
+                    </div>
                   ) : null}
                 </>
               ) : step === 1 ? (

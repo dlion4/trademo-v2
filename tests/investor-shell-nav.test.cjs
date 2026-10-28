@@ -42,18 +42,28 @@ test("page nav entries render as next/link anchors with the page modifier and co
 test("detailHref defaults to the pool register and overrides only the detail entry", () => {
   assert.match(shell, /detailHref = "\/investor\/pools",/);
   assert.match(shell, /detailHref\?: string;/);
-  assert.match(
-    shell,
-    /item\.key === "detail" \? \{ \.\.\.item, href: detailHref \} : item/,
-  );
-  assert.match(shell, /\[detailHref\],/);
+  assert.match(shell, /item\.key === "detail"/);
+  assert.match(shell, /href: detailHref/);
+  assert.match(shell, /item\.key === "book"/);
+  assert.match(shell, /href: bookHref/);
+  assert.match(shell, /\[detailHref, bookHref\],/);
 });
 
 test("non-page nav entries stay in-page actions", () => {
   const group = shell.slice(shell.indexOf('group: "Portfolio"'));
   const block = group.slice(0, group.indexOf("];"));
-  assert.doesNotMatch(block, /href:/);
-  assert.doesNotMatch(block, /code:/);
+  // "My investments" became its own route in I-6; every other Portfolio entry
+  // must remain an in-page action with no href and no page code.
+  const withoutPortfolio = block
+    .split("\n")
+    .filter((line) => !line.includes("href:") && !line.includes("code:"))
+    .join("\n");
+  assert.doesNotMatch(withoutPortfolio, /href:/);
+  assert.doesNotMatch(withoutPortfolio, /code:/);
+  assert.match(
+    block,
+    /key: "portfolio"[\s\S]*?href: "\/investor\/investments"/,
+  );
   assert.match(shell, /onClick=\{\(\) => navigate\(item\.key\)\}/);
 });
 

@@ -22,6 +22,8 @@ export type InvestorNavKey =
   | "overview"
   | "pools"
   | "detail"
+  | "book"
+  | "live"
   | "upcoming"
   | "earnings"
   | "activity"
@@ -110,6 +112,19 @@ const NAV: {
         href: "/investor/pools",
         code: "I-3",
       },
+      {
+        key: "book",
+        label: "Book & pay",
+        icon: "lock",
+        code: "I-4",
+      },
+      {
+        key: "live",
+        label: "Live trade tracker",
+        icon: "activity",
+        href: "/investor/live",
+        code: "I-5",
+      },
     ],
   },
   {
@@ -118,7 +133,13 @@ const NAV: {
       { key: "upcoming", label: "Upcoming windows", icon: "calendar" },
       { key: "earnings", label: "Earnings", icon: "trendUp" },
       { key: "activity", label: "Activity", icon: "activity" },
-      { key: "portfolio", label: "My investments", icon: "layers" },
+      {
+        key: "portfolio",
+        label: "My investments",
+        icon: "layers",
+        href: "/investor/investments",
+        code: "I-6",
+      },
     ],
   },
   {
@@ -142,6 +163,7 @@ export function InvestorShell({
   unread,
   activeNav,
   detailHref = "/investor/pools",
+  bookHref,
   quickActions,
   onNavigate,
   onOpenDrawer,
@@ -159,6 +181,8 @@ export function InvestorShell({
   unread: number;
   activeNav: InvestorNavKey;
   detailHref?: string;
+  /** Enables the I-4 “Book & pay” entry; only supplied when a window is open. */
+  bookHref?: string;
   quickActions: InvestorQuickAction[];
   onNavigate: (key: InvestorNavKey) => void;
   onOpenDrawer: (tab: InvestorDrawerTab) => void;
@@ -215,11 +239,17 @@ export function InvestorShell({
     () =>
       NAV.map((group) => ({
         ...group,
-        items: group.items.map((item) =>
-          item.key === "detail" ? { ...item, href: detailHref } : item,
-        ),
+        items: group.items
+          .map((item) =>
+            item.key === "detail"
+              ? { ...item, href: detailHref }
+              : item.key === "book"
+                ? { ...item, href: bookHref }
+                : item,
+          )
+          .filter((item) => item.key !== "book" || Boolean(item.href)),
       })),
-    [detailHref],
+    [detailHref, bookHref],
   );
   const toggleTheme = () => {
     themeStore.write(theme === "light" ? "dark" : "light");
@@ -569,6 +599,7 @@ export function InvestorShell({
               key: "portfolio" as const,
               label: "Portfolio",
               icon: "layers" as IconName,
+              href: "/investor/investments",
             },
             {
               key: "wallet" as const,

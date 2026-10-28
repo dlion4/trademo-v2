@@ -125,6 +125,7 @@ a.op-nav-link {
 
 .op-nav-code {
   margin-left: auto;
+  flex: 0 0 auto;
   padding: 0.04rem 0.34rem;
   border: 1px solid var(--border);
   border-radius: 3px;
@@ -181,10 +182,16 @@ a.op-nav-link {
 
 .iv-mobile-nav button > span,
 .iv-mobile-nav a > span {
+  display: block;
+  width: 100%;
   max-width: 100%;
+  padding-inline: 1px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  text-align: center;
+  font-size: 0.58rem;
+  letter-spacing: -0.1px;
 }
 
 .iv-mobile-nav button.is-active,

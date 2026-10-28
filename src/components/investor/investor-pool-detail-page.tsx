@@ -1472,6 +1472,11 @@ export function InvestorPoolDetailPage({
       unread={data.profile.unread}
       activeNav={activeNav}
       detailHref={`/investor/pools/${overview.id}`}
+      bookHref={
+        overview.lifecycle === "open"
+          ? `/investor/pools/${overview.id}/book`
+          : undefined
+      }
       quickActions={dockActions}
       onNavigate={scrollTo}
       onOpenDrawer={(tab: InvestorDrawerTab) =>
@@ -3341,6 +3346,14 @@ export function InvestorPoolDetailPage({
                     required before the funding desk confirms the slot.
                     Unverified reservations may be released when the window
                     closes.
+                  </div>
+                  <div className="pd-modal-links">
+                    <Link
+                      className="pd-link"
+                      href={`/investor/pools/${overview.id}/book`}
+                    >
+                      Open the full booking &amp; payment page ↗
+                    </Link>
                   </div>
                 </>
               ) : step === 1 ? (
