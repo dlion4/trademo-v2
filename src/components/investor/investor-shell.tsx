@@ -145,7 +145,13 @@ const NAV: {
   {
     group: "Account",
     items: [
-      { key: "wallet", label: "Wallet & payouts", icon: "wallet" },
+      {
+        key: "wallet",
+        label: "Wallet & payouts",
+        icon: "wallet",
+        href: "/investor/wallet",
+        code: "I-7",
+      },
       { key: "calculator", label: "Return calculator", icon: "chart" },
       { key: "notifications", label: "Notifications", icon: "bell" },
       { key: "settings", label: "Investor settings", icon: "sliders" },
