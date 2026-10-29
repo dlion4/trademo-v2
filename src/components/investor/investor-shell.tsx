@@ -132,7 +132,13 @@ const NAV: {
     group: "Portfolio",
     items: [
       { key: "upcoming", label: "Upcoming windows", icon: "calendar" },
-      { key: "earnings", label: "Earnings", icon: "trendUp" },
+      {
+        key: "earnings",
+        label: "Earnings",
+        icon: "trendUp",
+        href: "/investor/earnings",
+        code: "I-11",
+      },
       { key: "activity", label: "Activity", icon: "activity" },
       {
         key: "portfolio",
