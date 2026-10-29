@@ -31,6 +31,7 @@ export type InvestorNavKey =
   | "wallet"
   | "calculator"
   | "notifications"
+  | "referrals"
   | "settings";
 export type InvestorDrawerTab = "portfolio" | "activity" | "guardian";
 export interface InvestorQuickAction {
@@ -165,6 +166,13 @@ const NAV: {
         icon: "bell",
         href: "/investor/notifications",
         code: "I-9",
+      },
+      {
+        key: "referrals",
+        label: "Referrals & rewards",
+        icon: "gift",
+        href: "/investor/referrals",
+        code: "I-10",
       },
       { key: "settings", label: "Investor settings", icon: "sliders" },
     ],

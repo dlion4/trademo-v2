@@ -61,7 +61,10 @@ export type IconName =
   | "stop"
   | "plus"
   | "send"
-  | "chevronRight";
+  | "chevronRight"
+  | "gift"
+  | "trophy"
+  | "flame";
 
 const PATHS: Record<IconName, string> = {
   users:
@@ -98,6 +101,12 @@ const PATHS: Record<IconName, string> = {
   code: "M9 8l-4 4 4 4M15 8l4 4-4 4",
   target: "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18ZM12 16.5a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM12 13.2a1.2 1.2 0 1 0 0-2.4 1.2 1.2 0 0 0 0 2.4Z",
   chevronDown: "M6 9.5l6 6 6-6",
+  gift:
+    "M3.5 9h17v3.5h-17zM5.5 12.5V21h13v-8.5M12 9v12M8.4 9C6.6 9 5.6 7.9 5.6 6.7c0-1.3 1-2.2 2.3-2.2C10 4.5 12 9 12 9s2-4.5 4.1-4.5c1.3 0 2.3.9 2.3 2.2C18.4 7.9 17.4 9 15.6 9",
+  trophy:
+    "M8 4.5h8v4a4 4 0 0 1-8 0zM8 6H5.5v1.5A3.5 3.5 0 0 0 9 11M16 6h2.5v1.5A3.5 3.5 0 0 1 15 11M12 12.5V17M9 20.5h6M10 17h4",
+  flame:
+    "M12 3s4.5 4.2 4.5 8a4.5 4.5 0 0 1-9 0c0-1.7.8-3.1 1.7-4.1.3 1.2 1 2 1.9 2 0-2.5.9-4.6.9-5.9z",
   minus: "M6 12h12",
   play: "M7.5 4.5v15l12-7.5z",
   pause: "M8.5 5v14M15.5 5v14",

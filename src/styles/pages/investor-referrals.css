@@ -1,0 +1,3606 @@
+/* ═══════════════════════════════════════════════════════════════════════
+   I-10 · Referrals & Rewards — code and ladder, daily streak with tiers,
+   claimable reward cards, the monthly leaderboard and the reward statement.
+   Scoped under .page-investor-referrals. Light institutional palette,
+   hairline borders, tabular numerics, one accent. No gradients anywhere.
+
+   Motion hooks: code-copy hover-lift + checkmark icon-draw, streak counter
+   rise, week-cell fadeSlideUp 60 ms stagger, reward-card hover-lift + claim
+   icon-pulse, leaderboard rank-change slide, drawer slide-in, figure rise.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.page-investor-referrals {
+  --rf-accent-soft: #eef6f4;
+  --rf-warn: #b54708;
+  --rf-warn-soft: #fef3e7;
+  --rf-crit: #b42318;
+  --rf-crit-soft: #fdeceb;
+  --rf-ok: #0f766e;
+  --rf-ok-soft: #e8f5f2;
+  --rf-info: #175cd3;
+  --rf-info-soft: #eef4ff;
+  --rf-gold: #a16207;
+  --rf-gold-soft: #fdf6e3;
+  --rf-hairline: var(--border);
+  --rf-stripe: #fbfcfe;
+  --rf-grid: #eef1f5;
+}
+
+[data-bs-theme="dark"] .page-investor-referrals {
+  --rf-accent-soft: #13241f;
+  --rf-warn: #f0b27a;
+  --rf-warn-soft: #2a2013;
+  --rf-crit: #f3a09a;
+  --rf-crit-soft: #2a1614;
+  --rf-ok: #6fd3c0;
+  --rf-ok-soft: #10241f;
+  --rf-info: #8ab4f8;
+  --rf-info-soft: #131d2e;
+  --rf-gold: #e3b96b;
+  --rf-gold-soft: #251f11;
+  --rf-stripe: #121923;
+  --rf-grid: #1b2331;
+}
+
+.page-investor-referrals .rf-page {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 1560px;
+  margin-inline: auto;
+  color: var(--text-primary);
+  font-size: 12px;
+  min-width: 0;
+}
+
+.page-investor-referrals .mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.1px;
+}
+
+.page-investor-referrals .rf-muted {
+  color: var(--text-muted);
+  font-size: 10px;
+  line-height: 1.5;
+}
+
+.page-investor-referrals .is-pos {
+  color: var(--win);
+}
+
+.page-investor-referrals .is-neg,
+.page-investor-referrals .is-cut {
+  color: var(--loss);
+}
+
+.page-investor-referrals .is-accent {
+  color: var(--accent);
+}
+
+/* ── buttons, chips, tags, bars, switches ── */
+
+.page-investor-referrals .rf-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text-primary);
+  font-size: 10.5px;
+  font-weight: 600;
+  line-height: 1.2;
+  cursor: pointer;
+  transition: background var(--dur-fast) ease, border-color var(--dur-fast) ease,
+    transform var(--dur-fast) ease, box-shadow var(--dur-fast) ease;
+}
+
+.page-investor-referrals .rf-btn:hover:not(:disabled) {
+  background: var(--surface-sunken);
+  border-color: var(--border-glow);
+  transform: translateY(-1px);
+}
+
+.page-investor-referrals .rf-btn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.page-investor-referrals .rf-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.page-investor-referrals .rf-btn--primary {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: #ffffff;
+}
+
+[data-bs-theme="dark"] .page-investor-referrals .rf-btn--primary {
+  color: #06110f;
+}
+
+.page-investor-referrals .rf-btn--primary:hover:not(:disabled) {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+}
+
+.page-investor-referrals .rf-btn--sm {
+  padding: 4px 7px;
+  font-size: 10px;
+}
+
+.page-investor-referrals .rf-btn--ghost {
+  border-color: transparent;
+  background: transparent;
+  color: var(--text-secondary);
+}
+
+.page-investor-referrals .rf-btn--ghost:hover:not(:disabled) {
+  background: var(--surface-sunken);
+}
+
+.page-investor-referrals .rf-icon-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text-secondary);
+  cursor: pointer;
+  flex: 0 0 auto;
+  transition: background var(--dur-fast) ease, color var(--dur-fast) ease,
+    border-color var(--dur-fast) ease;
+}
+
+.page-investor-referrals .rf-icon-btn:hover:not(:disabled) {
+  background: var(--surface-sunken);
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+.page-investor-referrals .rf-icon-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.page-investor-referrals .rf-link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  border: 0;
+  background: none;
+  padding: 0;
+  color: var(--accent);
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.page-investor-referrals .rf-link-btn:hover {
+  color: var(--accent-hover);
+  text-decoration: underline;
+}
+
+.page-investor-referrals .rf-chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.page-investor-referrals .rf-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--dur-fast) ease, border-color var(--dur-fast) ease,
+    color var(--dur-fast) ease;
+}
+
+.page-investor-referrals .rf-chip:hover {
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+.page-investor-referrals .rf-chip.is-active {
+  background: var(--rf-accent-soft);
+  border-color: var(--accent-border);
+  color: var(--accent);
+}
+
+.page-investor-referrals .rf-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 6px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-inset);
+  color: var(--text-secondary);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.page-investor-referrals .rf-tag.is-win,
+.page-investor-referrals .rf-tag.is-qualified {
+  background: var(--rf-ok-soft);
+  border-color: #cbe7df;
+  color: var(--win);
+}
+
+.page-investor-referrals .rf-tag.is-wait,
+.page-investor-referrals .rf-tag.is-pending {
+  background: var(--rf-warn-soft);
+  border-color: #f3ddc2;
+  color: var(--rf-warn);
+}
+
+.page-investor-referrals .rf-tag.is-loss,
+.page-investor-referrals .rf-tag.is-lapsed {
+  background: var(--rf-crit-soft);
+  border-color: #f3d3cf;
+  color: var(--rf-crit);
+}
+
+.page-investor-referrals .rf-tag.is-plain {
+  background: var(--neutral-soft);
+}
+
+.page-investor-referrals .rf-bar {
+  position: relative;
+  display: block;
+  height: 5px;
+  border-radius: var(--radius-pill);
+  background: var(--rf-grid);
+  overflow: hidden;
+  flex: 1 1 auto;
+  min-width: 42px;
+}
+
+.page-investor-referrals .rf-bar__fill {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--border-glow);
+  transition: width var(--dur-slow) ease;
+}
+
+.page-investor-referrals .rf-bar.is-good .rf-bar__fill {
+  background: var(--win);
+}
+
+.page-investor-referrals .rf-bar.is-accent .rf-bar__fill {
+  background: var(--accent);
+}
+
+.page-investor-referrals .rf-bar.is-cut .rf-bar__fill {
+  background: var(--loss);
+}
+
+.page-investor-referrals .rf-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  cursor: pointer;
+}
+
+.page-investor-referrals .rf-toggle input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.page-investor-referrals .rf-toggle__text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.page-investor-referrals .rf-toggle__text strong {
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.page-investor-referrals .rf-toggle__text small {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.page-investor-referrals .rf-toggle__track {
+  position: relative;
+  width: 32px;
+  height: 18px;
+  border-radius: var(--radius-pill);
+  background: var(--border-strong);
+  flex: 0 0 auto;
+  transition: background var(--dur-base) ease;
+}
+
+.page-investor-referrals .rf-toggle__thumb {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 1px 2px rgb(15 23 42 / 25%);
+  transition: transform var(--dur-base) ease;
+}
+
+.page-investor-referrals .rf-toggle.is-on .rf-toggle__track {
+  background: var(--accent);
+}
+
+.page-investor-referrals .rf-toggle.is-on .rf-toggle__thumb {
+  transform: translateX(14px);
+}
+
+.page-investor-referrals .rf-toggle.is-locked {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.page-investor-referrals .rf-toggle-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ── figures & key/value ── */
+
+.page-investor-referrals .rf-figure {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 8px 10px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  min-width: 0;
+  animation: rf-rise var(--dur-slow) ease both;
+  animation-delay: var(--rf-delay, 0ms);
+}
+
+.page-investor-referrals .rf-figure__label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.page-investor-referrals .rf-figure__value {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.page-investor-referrals .rf-figure.is-big .rf-figure__value {
+  font-size: 26px;
+}
+
+.page-investor-referrals .rf-figure__hint {
+  font-size: 9.5px;
+  color: var(--text-muted);
+}
+
+.page-investor-referrals .rf-kv {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 0;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.page-investor-referrals .rf-kv > div {
+  display: grid;
+  grid-template-columns: minmax(96px, 38%) 1fr;
+  gap: 10px;
+  padding: 6px 9px;
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--surface);
+}
+
+.page-investor-referrals .rf-kv > div:last-child {
+  border-bottom: 0;
+}
+
+.page-investor-referrals .rf-kv dt {
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.page-investor-referrals .rf-kv dd {
+  margin: 0;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+  overflow-wrap: anywhere;
+}
+
+/* ── hero ── */
+
+.page-investor-referrals .rf-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  gap: 14px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+}
+
+.page-investor-referrals .rf-hero__main {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.page-investor-referrals .rf-eyebrow {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.page-investor-referrals .rf-hero h1 {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.4px;
+  line-height: 1.15;
+}
+
+.page-investor-referrals .rf-lede {
+  margin: 0;
+  max-width: 78ch;
+  font-size: 11.5px;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+
+.page-investor-referrals .rf-hero__figures {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.page-investor-referrals .rf-hero__side {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-left: 1px solid var(--border-subtle);
+  padding-left: 14px;
+  min-width: 0;
+}
+
+.page-investor-referrals .rf-hero__panel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+}
+
+.page-investor-referrals .rf-panel-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.page-investor-referrals .rf-today {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.page-investor-referrals .rf-today li {
+  display: grid;
+  grid-template-columns: 26px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+}
+
+.page-investor-referrals .rf-today__icon {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-secondary);
+}
+
+.page-investor-referrals .rf-today__icon.is-flame {
+  background: var(--rf-warn-soft);
+  border-color: #f3ddc2;
+  color: var(--rf-warn);
+}
+
+.page-investor-referrals .rf-today__icon.is-gift {
+  background: var(--rf-accent-soft);
+  border-color: var(--accent-border);
+  color: var(--accent);
+}
+
+.page-investor-referrals .rf-today__icon.is-pool {
+  background: var(--rf-info-soft);
+  border-color: #d7e3fb;
+  color: var(--rf-info);
+}
+
+.page-investor-referrals .rf-today__text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.page-investor-referrals .rf-today__text strong {
+  font-size: 10.5px;
+  font-weight: 600;
+}
+
+.page-investor-referrals .rf-today__text small {
+  font-size: 9.5px;
+  color: var(--text-muted);
+}
+
+.page-investor-referrals .rf-mini-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.page-investor-referrals .rf-mini-actions button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 6px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--dur-fast) ease, color var(--dur-fast) ease,
+    border-color var(--dur-fast) ease;
+}
+
+.page-investor-referrals .rf-mini-actions button:hover {
+  background: var(--surface-sunken);
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+/* ── code card ── */
+
+.page-investor-referrals .rf-code-card {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+}
+
+.page-investor-referrals .rf-code-card__main {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.page-investor-referrals .rf-code {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  align-self: flex-start;
+  padding: 8px 12px;
+  border: 1px dashed var(--accent-border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text-primary);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 1.6px;
+  cursor: pointer;
+  transition: transform var(--dur-fast) ease, box-shadow var(--dur-fast) ease,
+    border-color var(--dur-fast) ease;
+}
+
+.page-investor-referrals .rf-code:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgb(15 23 42 / 8%);
+  border-color: var(--accent);
+}
+
+.page-investor-referrals .rf-code:active {
+  transform: translateY(0);
+}
+
+.page-investor-referrals .rf-code__icon {
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  color: var(--accent);
+}
+
+.page-investor-referrals .rf-code.is-copied {
+  border-color: var(--accent);
+  background: var(--rf-accent-soft);
+}
+
+.page-investor-referrals .rf-code.is-copied .rf-code__icon svg {
+  animation: rf-draw 420ms ease both;
+  stroke-dasharray: 26;
+  stroke-dashoffset: 26;
+  animation-name: rf-draw, rf-check-in;
+}
+
+.page-investor-referrals .rf-code-card__link {
+  margin: 0;
+  font-size: 10.5px;
+  color: var(--text-secondary);
+  overflow-wrap: anywhere;
+}
+
+.page-investor-referrals .rf-code-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.page-investor-referrals .rf-code-card__side {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-left: 1px solid var(--border-subtle);
+  padding-left: 12px;
+  min-width: 0;
+}
+
+.page-investor-referrals .rf-share-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.page-investor-referrals .rf-share-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 7px 6px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform var(--dur-fast) ease, border-color var(--dur-fast) ease,
+    color var(--dur-fast) ease, background var(--dur-fast) ease;
+}
+
+.page-investor-referrals .rf-share-btn:hover {
+  transform: translateY(-1px);
+  border-color: var(--accent-border);
+  background: var(--rf-accent-soft);
+  color: var(--accent);
+}
+
+.page-investor-referrals .rf-code-card__note {
+  display: flex;
+  gap: 5px;
+  margin: 0;
+  font-size: 9.5px;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+/* ── jump bar ── */
+
+.page-investor-referrals .rf-jump {
+  display: flex;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.page-investor-referrals .rf-jump button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 10.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: background var(--dur-fast) ease, color var(--dur-fast) ease,
+    border-color var(--dur-fast) ease;
+}
+
+.page-investor-referrals .rf-jump button:hover {
+  background: var(--surface);
+  color: var(--text-primary);
+}
+
+.page-investor-referrals .rf-jump button.is-active {
+  background: var(--surface);
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+.page-investor-referrals .rf-jump__count {
+  padding: 0 5px;
+  border-radius: var(--radius-pill);
+  background: var(--neutral-soft);
+  color: var(--text-muted);
+  font-size: 9px;
+}
+
+.page-investor-referrals .rf-jump button.is-active .rf-jump__count {
+  background: var(--rf-accent-soft);
+  color: var(--accent);
+}
+
+/* ── section chrome ── */
+
+.page-investor-referrals .rf-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  scroll-margin-top: 12px;
+}
+
+.page-investor-referrals .rf-section-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.page-investor-referrals .rf-section-head > div:first-child {
+  min-width: 0;
+}
+
+.page-investor-referrals .rf-section-code {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.page-investor-referrals .rf-section-head h2 {
+  margin: 2px 0 3px;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+}
+
+.page-investor-referrals .rf-section-head p {
+  margin: 0;
+  max-width: 96ch;
+  font-size: 10.5px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.page-investor-referrals .rf-section-aside {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  flex: 0 0 auto;
+}
+
+/* ═══ 1 · referral program ═══ */
+
+.page-investor-referrals .rf-program {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.page-investor-referrals .rf-ladder {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.page-investor-referrals .rf-rung {
+  display: grid;
+  grid-template-columns: 26px minmax(0, 1fr) auto;
+  gap: 10px;
+  align-items: start;
+  padding: 10px;
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--surface);
+  animation: rf-rise var(--dur-slow) ease both;
+  animation-delay: var(--rf-delay, 0ms);
+  transition: background var(--dur-fast) ease;
+}
+
+.page-investor-referrals .rf-rung:hover {
+  background: var(--rf-stripe);
+}
+
+.page-investor-referrals .rf-rung__index {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+.page-investor-referrals .rf-rung__body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.page-investor-referrals .rf-rung__body strong {
+  font-size: 11.5px;
+  font-weight: 700;
+}
+
+.page-investor-referrals .rf-rung__body p {
+  margin: 0;
+  font-size: 10px;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+
+.page-investor-referrals .rf-rung__amount {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.page-investor-referrals .rf-ladder__cap {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  padding: 9px 10px;
+  background: var(--surface-sunken);
+  font-size: 10px;
+  color: var(--text-secondary);
+}
+
+.page-investor-referrals .rf-ladder__cap .mono:first-child {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+
+.page-investor-referrals .rf-ladder__cap b {
+  font-size: 13px;
+  color: var(--text-primary);
+}
+
+.page-investor-referrals .rf-program__side {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.page-investor-referrals .rf-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.page-investor-referrals .rf-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 8px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  min-width: 0;
+}
+
+.page-investor-referrals .rf-stat span {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.page-investor-referrals .rf-stat b {
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.page-investor-referrals .rf-stat small {
+  font-size: 9px;
+  color: var(--text-muted);
+  line-height: 1.35;
+}
+
+.page-investor-referrals .rf-stat.is-good b {
+  color: var(--win);
+}
+
+.page-investor-referrals .rf-stat.is-wait b {
+  color: var(--rf-warn);
+}
+
+.page-investor-referrals .rf-stat.is-cut b {
+  color: var(--loss);
+}
+
+.page-investor-referrals .rf-earned {
+  display: grid;
+  grid-template-columns: minmax(0, auto) minmax(0, 1fr);
+  gap: 12px;
+  align-items: center;
+  padding: 10px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+}
+
+.page-investor-referrals .rf-earned > div:first-child {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.page-investor-referrals .rf-earned__value {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: var(--win);
+}
+
+.page-investor-referrals .rf-earned__bar {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.page-investor-referrals .rf-funnel {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 10px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+}
+
+.page-investor-referrals .rf-funnel__row {
+  display: grid;
+  grid-template-columns: 86px minmax(0, 1fr) 22px 34px;
+  align-items: center;
+  gap: 7px;
+  font-size: 10px;
+  color: var(--text-secondary);
+}
+
+.page-investor-referrals .rf-funnel__row b {
+  text-align: right;
+  color: var(--text-primary);
+}
+
+.page-investor-referrals .rf-funnel__row small {
+  text-align: right;
+}
+
+.page-investor-referrals .rf-invites {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 10px;
+}
+
+.page-investor-referrals .rf-invites__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.page-investor-referrals .rf-invites__head h3 {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.page-investor-referrals .rf-invite-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 7px;
+}
+
+.page-investor-referrals .rf-invite {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr) auto;
+  gap: 9px;
+  align-items: center;
+  padding: 9px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  animation: rf-fade-step var(--dur-slow) ease both;
+  animation-delay: var(--rf-delay, 0ms);
+  transition: border-color var(--dur-fast) ease, background var(--dur-fast) ease;
+}
+
+.page-investor-referrals .rf-invite:hover {
+  border-color: var(--border-strong);
+  background: var(--rf-stripe);
+}
+
+.page-investor-referrals .rf-invite__avatar {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-sm);
+  background: var(--surface-sunken);
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.page-investor-referrals .rf-invite.is-qualified .rf-invite__avatar {
+  background: var(--rf-ok-soft);
+  border-color: #cbe7df;
+  color: var(--win);
+}
+
+.page-investor-referrals .rf-invite.is-pending .rf-invite__avatar {
+  background: var(--rf-warn-soft);
+  border-color: #f3ddc2;
+  color: var(--rf-warn);
+}
+
+.page-investor-referrals .rf-invite.is-lapsed .rf-invite__avatar {
+  background: var(--rf-crit-soft);
+  border-color: #f3d3cf;
+  color: var(--rf-crit);
+}
+
+.page-investor-referrals .rf-invite__body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.page-investor-referrals .rf-invite__top {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.page-investor-referrals .rf-invite__top strong {
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.page-investor-referrals .rf-invite__meta {
+  font-size: 9px;
+  color: var(--text-muted);
+}
+
+.page-investor-referrals .rf-invite__pips {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.page-investor-referrals .rf-invite__stage {
+  font-size: 9px;
+}
+
+.page-investor-referrals .rf-pip {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 1px 5px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-pill);
+  background: var(--surface-sunken);
+  color: var(--text-muted);
+  font-size: 9px;
+  animation: rf-fade-step var(--dur-base) ease both;
+  animation-delay: var(--rf-delay, 0ms);
+}
+
+.page-investor-referrals .rf-pip.is-done {
+  background: var(--rf-ok-soft);
+  border-color: #cbe7df;
+  color: var(--win);
+}
+
+.page-investor-referrals .rf-pip b {
+  font-size: 9px;
+  font-weight: 700;
+}
+
+.page-investor-referrals .rf-invite__right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  text-align: right;
+}
+
+.page-investor-referrals .rf-invite__right b {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.page-investor-referrals .rf-empty {
+  margin: 0;
+  padding: 12px;
+  border: 1px dashed var(--border);
+  border-radius: var(--radius-sm);
+  text-align: center;
+}
+
+/* ═══ 2 · daily streaks ═══ */
+
+.page-investor-referrals .rf-streak {
+  display: grid;
+  grid-template-columns: 282px minmax(0, 1fr);
+  gap: 12px;
+  align-items: start;
+}
+
+.page-investor-referrals .rf-streak__claim .rf-btn {
+  white-space: nowrap;
+}
+
+.page-investor-referrals .rf-streak__counter {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+  min-width: 0;
+}
+
+.page-investor-referrals .rf-streak__number {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.page-investor-referrals .rf-streak__number b {
+  font-size: 44px;
+  font-weight: 700;
+  line-height: 1;
+  letter-spacing: -1.4px;
+  color: var(--accent);
+  animation: rf-rise var(--dur-slow) ease both;
+}
+
+.page-investor-referrals .rf-streak__number span {
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.page-investor-referrals .rf-streak__counter p {
+  margin: 0;
+}
+
+.page-investor-referrals .rf-streak__claim {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 4px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.page-investor-referrals .rf-streak__claim > div {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.page-investor-referrals .rf-streak__claim strong {
+  font-size: 10.5px;
+  font-weight: 700;
+}
+
+.page-investor-referrals .rf-streak__week {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  min-width: 0;
+}
+
+.page-investor-referrals .rf-week-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.page-investor-referrals .rf-week {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.page-investor-referrals .rf-week.is-compact {
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 4px;
+}
+
+.page-investor-referrals .rf-week.is-wide {
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.page-investor-referrals .rf-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 7px 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  animation: rf-fade-step var(--dur-base) ease both;
+  animation-delay: var(--rf-delay, 0ms);
+  transition: border-color var(--dur-fast) ease, background var(--dur-fast) ease,
+    transform var(--dur-fast) ease;
+}
+
+.page-investor-referrals .rf-day:hover {
+  transform: translateY(-1px);
+  border-color: var(--border-strong);
+}
+
+.page-investor-referrals .rf-day__label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.page-investor-referrals .rf-day__cell {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-muted);
+}
+
+.page-investor-referrals .rf-day__date {
+  font-size: 9px;
+  color: var(--text-muted);
+}
+
+.page-investor-referrals .rf-day__bonus {
+  font-size: 9px;
+  color: var(--text-muted);
+}
+
+.page-investor-referrals .rf-day.is-done {
+  background: var(--rf-ok-soft);
+  border-color: #cbe7df;
+}
+
+.page-investor-referrals .rf-day.is-done .rf-day__cell {
+  background: var(--win);
+  border-color: var(--win);
+  color: #ffffff;
+}
+
+.page-investor-referrals .rf-day.is-done .rf-day__bonus {
+  color: var(--win);
+  font-weight: 700;
+}
+
+.page-investor-referrals .rf-day.is-today {
+  background: var(--rf-accent-soft);
+  border-color: var(--accent-border);
+  box-shadow: inset 0 0 0 1px var(--accent-border);
+}
+
+.page-investor-referrals .rf-day.is-today .rf-day__cell {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--surface);
+}
+
+.page-investor-referrals .rf-day.is-today .rf-day__label {
+  color: var(--accent);
+}
+
+.page-investor-referrals .rf-day.is-missed {
+  background: var(--rf-crit-soft);
+  border-color: #f3d3cf;
+}
+
+.page-investor-referrals .rf-day.is-missed .rf-day__cell {
+  color: var(--rf-crit);
+}
+
+.page-investor-referrals .rf-tier-strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.page-investor-referrals .rf-tier {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1px;
+  padding: 8px 9px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color var(--dur-fast) ease, transform var(--dur-fast) ease;
+}
+
+.page-investor-referrals .rf-tier:hover {
+  transform: translateY(-1px);
+  border-color: var(--border-strong);
+}
+
+.page-investor-referrals .rf-tier__days {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.page-investor-referrals .rf-tier b {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.page-investor-referrals .rf-tier small {
+  font-size: 9px;
+  color: var(--text-muted);
+}
+
+.page-investor-referrals .rf-tier.is-reached {
+  border-color: #cbe7df;
+  background: var(--rf-ok-soft);
+}
+
+.page-investor-referrals .rf-tier.is-reached b {
+  color: var(--win);
+}
+
+.page-investor-referrals .rf-tier.is-next {
+  border-color: var(--accent-border);
+  background: var(--rf-accent-soft);
+}
+
+.page-investor-referrals .rf-tier.is-next b {
+  color: var(--accent);
+}
+
+.page-investor-referrals .rf-tier.is-locked {
+  opacity: 0.72;
+}
+
+.page-investor-referrals .rf-streak__progress {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.page-investor-referrals .rf-streak__progress-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 10px;
+  color: var(--text-secondary);
+}
+
+.page-investor-referrals .rf-howto {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 8px;
+}
+
+.page-investor-referrals .rf-howto li {
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr);
+  gap: 6px;
+  font-size: 10px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.page-investor-referrals .rf-howto svg {
+  margin-top: 2px;
+  color: var(--accent);
+}
+
+.page-investor-referrals .rf-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 0;
+  padding: 7px 9px;
+  border: 1px solid var(--border-subtle);
+  border-left: 2px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  font-size: 10px;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+
+.page-investor-referrals .rf-note svg {
+  margin-top: 1px;
+  flex: 0 0 auto;
+  color: var(--text-muted);
+}
+
+.page-investor-referrals .rf-note.is-warn {
+  border-left-color: var(--rf-warn);
+  background: var(--rf-warn-soft);
+  color: var(--rf-warn);
+}
+
+/* ═══ 3 · available rewards ═══ */
+
+.page-investor-referrals .rf-rewards {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 12px;
+  align-items: start;
+}
+
+.page-investor-referrals .rf-reward-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 8px;
+  align-content: start;
+}
+
+.page-investor-referrals .rf-reward {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 11px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  animation: rf-rise var(--dur-slow) ease both;
+  animation-delay: var(--rf-delay, 0ms);
+  transition: transform var(--dur-base) ease, box-shadow var(--dur-base) ease,
+    border-color var(--dur-base) ease;
+}
+
+.page-investor-referrals .rf-reward:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgb(15 23 42 / 7%);
+  border-color: var(--border-strong);
+}
+
+.page-investor-referrals .rf-reward.is-ready {
+  border-color: var(--accent-border);
+}
+
+.page-investor-referrals .rf-reward.is-ready::before {
+  content: "";
+  display: block;
+  height: 2px;
+  margin: -11px -11px 4px;
+  background: var(--accent);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+
+.page-investor-referrals .rf-reward.is-soon {
+  border-style: dashed;
+}
+
+.page-investor-referrals .rf-reward.is-locked {
+  opacity: 0.82;
+}
+
+.page-investor-referrals .rf-reward__head {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr) auto;
+  gap: 8px;
+  align-items: center;
+}
+
+.page-investor-referrals .rf-reward__icon {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--accent-border);
+  background: var(--rf-accent-soft);
+  color: var(--accent);
+}
+
+.page-investor-referrals .rf-reward__head > div {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.page-investor-referrals .rf-reward__head strong {
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.page-investor-referrals .rf-reward__amount {
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: -0.3px;
+}
+
+.page-investor-referrals .rf-reward__detail {
+  margin: 0;
+  font-size: 10px;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+
+.page-investor-referrals .rf-reward__meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.page-investor-referrals .rf-reward__progress {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.page-investor-referrals .rf-reward__hint {
+  margin: 0;
+  font-size: 9.5px;
+  line-height: 1.5;
+  color: var(--text-muted);
+}
+
+.page-investor-referrals .rf-reward__actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: auto;
+  padding-top: 4px;
+}
+
+.page-investor-referrals .rf-claim svg {
+  animation: rf-pulse 2.6s ease-in-out infinite;
+}
+
+.page-investor-referrals .rf-rewards__side {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.page-investor-referrals .rf-total-card {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 11px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+}
+
+.page-investor-referrals .rf-total-card__value {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.8px;
+  color: var(--accent);
+}
+
+.page-investor-referrals .rf-total-card__rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 6px;
+}
+
+.page-investor-referrals .rf-total-card__rows li {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 10px;
+  color: var(--text-secondary);
+}
+
+.page-investor-referrals .rf-total-card__rows b {
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.page-investor-referrals .rf-total-card__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 6px;
+}
+
+.page-investor-referrals .rf-campaigns-mini,
+.page-investor-referrals .rf-goal-mini {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 10px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+}
+
+.page-investor-referrals .rf-campaign-mini {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 8px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color var(--dur-fast) ease, background var(--dur-fast) ease;
+}
+
+.page-investor-referrals .rf-campaign-mini:hover {
+  border-color: var(--border-strong);
+  background: var(--surface-sunken);
+}
+
+.page-investor-referrals .rf-campaign-mini__body {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.page-investor-referrals .rf-campaign-mini__body strong {
+  font-size: 10.5px;
+  font-weight: 600;
+}
+
+.page-investor-referrals .rf-campaign-mini__body small {
+  font-size: 9px;
+}
+
+.page-investor-referrals .rf-campaign-mini b {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.page-investor-referrals .rf-goal-mini__top {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  font-size: 10px;
+}
+
+.page-investor-referrals .rf-goal-mini__top b {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+/* ═══ 4 · leaderboard ═══ */
+
+.page-investor-referrals .rf-board {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 288px;
+  gap: 12px;
+  align-items: start;
+}
+
+.page-investor-referrals .rf-board__table {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+}
+
+.page-investor-referrals .rf-board__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.page-investor-referrals .rf-table-wrap {
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+  background: var(--surface);
+}
+
+.page-investor-referrals .rf-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 10.5px;
+}
+
+.page-investor-referrals .rf-table thead th {
+  padding: 6px 9px;
+  border-bottom: 1px solid var(--border);
+  background: var(--surface-sunken);
+  text-align: left;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  white-space: nowrap;
+}
+
+.page-investor-referrals .rf-table tbody td {
+  padding: 7px 9px;
+  border-bottom: 1px solid var(--border-subtle);
+  vertical-align: middle;
+  color: var(--text-secondary);
+}
+
+.page-investor-referrals .rf-table tbody tr {
+  animation: rf-fade-step var(--dur-base) ease both;
+  animation-delay: var(--rf-delay, 0ms);
+  transition: background var(--dur-fast) ease;
+}
+
+.page-investor-referrals .rf-table tbody tr:hover {
+  background: var(--rf-stripe);
+}
+
+.page-investor-referrals .rf-table tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+.page-investor-referrals .rf-table tbody tr.is-you {
+  background: var(--rf-accent-soft);
+  box-shadow: inset 2px 0 0 var(--accent);
+}
+
+.page-investor-referrals .rf-table tbody tr.is-you td {
+  color: var(--text-primary);
+  font-weight: 600;
+}
+
+.page-investor-referrals .rf-table tbody tr.is-podium td {
+  background: var(--rf-gold-soft);
+}
+
+.page-investor-referrals .rf-table tbody tr.is-queued td {
+  background: var(--rf-warn-soft);
+}
+
+.page-investor-referrals .rf-sort {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  border: 0;
+  background: none;
+  padding: 0;
+  font: inherit;
+  color: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+}
+
+.page-investor-referrals .rf-sort:disabled {
+  cursor: default;
+}
+
+.page-investor-referrals .rf-rank {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--text-primary);
+}
+
+.page-investor-referrals .rf-rank.is-1 {
+  color: var(--rf-gold);
+}
+
+.page-investor-referrals .rf-rank.is-2 {
+  color: #64748b;
+}
+
+.page-investor-referrals .rf-rank.is-3 {
+  color: #a16207;
+  opacity: 0.82;
+}
+
+.page-investor-referrals .rf-board__alias {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.page-investor-referrals .rf-board__alias b {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.page-investor-referrals .rf-board__alias small {
+  font-size: 9px;
+}
+
+.page-investor-referrals .rf-delta {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 1px 5px;
+  border-radius: var(--radius-sm);
+  font-size: 9.5px;
+  font-weight: 700;
+  animation: rf-rank-slide var(--dur-slow) ease both;
+}
+
+.page-investor-referrals .rf-delta.is-up {
+  background: var(--rf-ok-soft);
+  color: var(--win);
+}
+
+.page-investor-referrals .rf-delta.is-down {
+  background: var(--rf-crit-soft);
+  color: var(--rf-crit);
+}
+
+.page-investor-referrals .rf-delta.is-flat {
+  color: var(--text-muted);
+}
+
+.page-investor-referrals .rf-table__action {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.page-investor-referrals .rf-board__you {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 11px;
+  border: 1px solid var(--accent-border);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+  height: fit-content;
+}
+
+.page-investor-referrals .rf-you {
+  display: grid;
+  grid-template-columns: 46px minmax(0, 1fr) auto;
+  gap: 9px;
+  align-items: center;
+}
+
+.page-investor-referrals .rf-you__rank {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border: 1px solid var(--accent-border);
+  border-radius: var(--radius-sm);
+  background: var(--rf-accent-soft);
+  color: var(--accent);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.page-investor-referrals .rf-you__rank small {
+  font-size: 7.5px;
+  letter-spacing: 0.1em;
+  color: var(--text-muted);
+}
+
+.page-investor-referrals .rf-you__body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.page-investor-referrals .rf-you__body strong {
+  font-size: 11.5px;
+  font-weight: 700;
+}
+
+.page-investor-referrals .rf-you__star {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--rf-gold-soft);
+  color: var(--rf-gold);
+}
+
+.page-investor-referrals .rf-drawer-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: auto;
+}
+
+/* ═══ 5 · history ═══ */
+
+.page-investor-referrals .rf-history {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 12px;
+  align-items: start;
+}
+
+.page-investor-referrals .rf-history__table {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--surface);
+  min-width: 0;
+}
+
+.page-investor-referrals .rf-history__table .rf-table {
+  min-width: 620px;
+}
+
+.page-investor-referrals .rf-ref {
+  white-space: nowrap;
+  border: 0;
+  background: none;
+  padding: 0;
+  font-size: 9.5px;
+  color: var(--accent);
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-underline-offset: 2px;
+}
+
+.page-investor-referrals .rf-history__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 7px 9px;
+  border-top: 1px solid var(--border-subtle);
+  background: var(--surface-2);
+}
+
+.page-investor-referrals .rf-pager {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.page-investor-referrals .rf-history__side {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.page-investor-referrals .rf-history__totals {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+}
+
+.page-investor-referrals .rf-history__credits,
+.page-investor-referrals .rf-history__note {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 10px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+}
+
+.page-investor-referrals .rf-credit-mini {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 6px 8px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  cursor: pointer;
+  text-align: left;
+  transition: border-color var(--dur-fast) ease;
+}
+
+.page-investor-referrals .rf-credit-mini:hover {
+  border-color: var(--border-strong);
+}
+
+.page-investor-referrals .rf-credit-mini__body {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.page-investor-referrals .rf-credit-mini__body strong {
+  font-size: 9.5px;
+  font-weight: 600;
+}
+
+.page-investor-referrals .rf-credit-mini__body small {
+  font-size: 9px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.page-investor-referrals .rf-credit-mini__right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+}
+
+.page-investor-referrals .rf-credit-mini__right b {
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.page-investor-referrals .rf-status-dot {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.page-investor-referrals .rf-status-dot::before {
+  content: "";
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.page-investor-referrals .rf-status-dot.is-ok {
+  color: var(--win);
+}
+
+.page-investor-referrals .rf-status-dot.is-wait {
+  color: var(--rf-warn);
+}
+
+/* ── desk shortcuts ── */
+
+.page-investor-referrals .rf-shortcuts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+}
+
+.page-investor-referrals .rf-shortcuts button {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 9px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text-secondary);
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background var(--dur-fast) ease, color var(--dur-fast) ease,
+    border-color var(--dur-fast) ease;
+}
+
+.page-investor-referrals .rf-shortcuts button:hover {
+  background: var(--surface-sunken);
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+/* ── right drawer ── */
+
+.page-investor-referrals .rf-drawer-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 1088;
+  display: flex;
+  justify-content: flex-end;
+  background: rgb(15 23 42 / 28%);
+  animation: rf-fade-in var(--dur-base) ease both;
+}
+
+.page-investor-referrals .rf-drawer {
+  display: flex;
+  flex-direction: column;
+  width: min(452px, 100vw);
+  height: 100dvh;
+  background: var(--surface);
+  border-left: 1px solid var(--border-strong);
+  box-shadow: var(--shadow-lift, 0 18px 48px rgb(15 23 42 / 18%));
+  animation: rf-drawer-in 260ms var(--ease-out, ease-out) both;
+}
+
+.page-investor-referrals .rf-drawer__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 14px 16px 10px;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.page-investor-referrals .rf-drawer__head h2 {
+  margin: 2px 0 0;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.2px;
+}
+
+.page-investor-referrals .rf-drawer__tabs {
+  display: flex;
+  gap: 2px;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--border);
+}
+
+.page-investor-referrals .rf-drawer__tabs button {
+  padding: 8px 10px;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background: none;
+  color: var(--text-muted);
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color var(--dur-fast) ease, border-color var(--dur-fast) ease;
+}
+
+.page-investor-referrals .rf-drawer__tabs button:hover {
+  color: var(--text-primary);
+}
+
+.page-investor-referrals .rf-drawer__tabs button.is-active {
+  border-bottom-color: var(--accent);
+  color: var(--accent);
+}
+
+.page-investor-referrals .rf-drawer__body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 16px 20px;
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.page-investor-referrals .rf-drawer__code {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 10px;
+  border: 1px dashed var(--accent-border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+}
+
+.page-investor-referrals .rf-drawer__code b {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.page-investor-referrals .rf-drawer__list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.page-investor-referrals .rf-drawer__row {
+  display: grid;
+  grid-template-columns: 18px minmax(0, 1fr) 14px;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 8px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text-secondary);
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--dur-fast) ease, border-color var(--dur-fast) ease;
+}
+
+.page-investor-referrals .rf-drawer__row:hover {
+  background: var(--surface-sunken);
+  border-color: var(--border-strong);
+}
+
+.page-investor-referrals .rf-drawer__row > span {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.page-investor-referrals .rf-drawer__row strong {
+  font-size: 10.5px;
+  font-weight: 600;
+}
+
+.page-investor-referrals .rf-drawer__streak,
+.page-investor-referrals .rf-drawer__you {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border: 1px solid var(--accent-border);
+  border-radius: var(--radius-sm);
+  background: var(--rf-accent-soft);
+}
+
+.page-investor-referrals .rf-drawer__streak b {
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--accent);
+}
+
+.page-investor-referrals .rf-drawer__streak > span,
+.page-investor-referrals .rf-drawer__you > span:not(.rf-you__rank) {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.page-investor-referrals .rf-drawer__streak strong,
+.page-investor-referrals .rf-drawer__you strong {
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.page-investor-referrals .rf-timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 2px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.page-investor-referrals .rf-timeline li {
+  display: grid;
+  grid-template-columns: 10px minmax(0, 1fr);
+  gap: 8px;
+  align-items: start;
+  position: relative;
+}
+
+.page-investor-referrals .rf-timeline li:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 12px;
+  bottom: -8px;
+  width: 1px;
+  background: var(--border);
+}
+
+.page-investor-referrals .rf-timeline__dot {
+  width: 9px;
+  height: 9px;
+  margin-top: 3px;
+  border-radius: 50%;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+}
+
+.page-investor-referrals .rf-timeline__dot.is-done {
+  border-color: var(--win);
+  background: var(--win);
+}
+
+.page-investor-referrals .rf-timeline__dot.is-next {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+.page-investor-referrals .rf-timeline li > span:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.page-investor-referrals .rf-timeline strong {
+  font-size: 10.5px;
+  font-weight: 600;
+}
+
+.page-investor-referrals .rf-timeline small {
+  font-size: 9.5px;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
+/* ── modals ── */
+
+.page-investor-referrals .rf-modal-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+}
+
+.page-investor-referrals .rf-modal-layer .desk-modal {
+  min-width: 0;
+  max-width: min(880px, calc(100vw - 32px));
+}
+
+.page-investor-referrals .rf-modal-layer .desk-modal__body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+  max-height: min(66vh, 640px);
+  overflow-y: auto;
+}
+
+.page-investor-referrals .rf-modal-layer .desk-code-tag {
+  flex: 0 0 auto;
+  white-space: nowrap;
+}
+
+.page-investor-referrals .rf-modal-layer .desk-modal__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  row-gap: 6px;
+}
+
+.page-investor-referrals .rf-modal-lede {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+
+.page-investor-referrals .rf-error {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin: 0;
+  padding: 7px 10px;
+  border: 1px solid #f3d3cf;
+  border-left: 3px solid var(--rf-crit);
+  border-radius: var(--radius-sm);
+  background: var(--rf-crit-soft);
+  color: var(--rf-crit);
+  font-size: 10.5px;
+  font-weight: 600;
+}
+
+.page-investor-referrals .rf-modal-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin: 0;
+  padding: 8px 10px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  font-size: 10px;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+
+.page-investor-referrals .rf-modal-note svg {
+  margin-top: 1px;
+  flex: 0 0 auto;
+  color: var(--text-muted);
+}
+
+.page-investor-referrals .rf-modal-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.page-investor-referrals .rf-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.page-investor-referrals .rf-field > span {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.page-investor-referrals .rf-field input,
+.page-investor-referrals .rf-field textarea {
+  width: 100%;
+  padding: 7px 9px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text-primary);
+  font-family: inherit;
+  font-size: 11px;
+  line-height: 1.5;
+  resize: vertical;
+}
+
+.page-investor-referrals .rf-field input:focus,
+.page-investor-referrals .rf-field textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--rf-accent-soft);
+}
+
+.page-investor-referrals .rf-field small {
+  align-self: flex-end;
+  font-size: 9px;
+}
+
+.page-investor-referrals .rf-option-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.page-investor-referrals .rf-option-grid.is-two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.page-investor-referrals .rf-option {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+  padding: 9px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  color: var(--text-secondary);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color var(--dur-fast) ease, background var(--dur-fast) ease,
+    transform var(--dur-fast) ease, color var(--dur-fast) ease;
+}
+
+.page-investor-referrals .rf-option:hover {
+  transform: translateY(-1px);
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+.page-investor-referrals .rf-option strong {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.page-investor-referrals .rf-option small {
+  font-size: 9px;
+  line-height: 1.4;
+  color: var(--text-muted);
+}
+
+.page-investor-referrals .rf-option.is-active {
+  border-color: var(--accent);
+  background: var(--rf-accent-soft);
+  box-shadow: inset 0 0 0 1px var(--accent-border);
+}
+
+.page-investor-referrals .rf-option.is-active svg {
+  color: var(--accent);
+}
+
+.page-investor-referrals .rf-option-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.page-investor-referrals .rf-option-row {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  color: var(--text-secondary);
+  text-align: left;
+  cursor: pointer;
+  transition: border-color var(--dur-fast) ease, background var(--dur-fast) ease;
+}
+
+.page-investor-referrals .rf-option-row:hover {
+  border-color: var(--border-strong);
+}
+
+.page-investor-referrals .rf-option-row > span {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.page-investor-referrals .rf-option-row strong {
+  font-size: 10.8px;
+  font-weight: 650;
+  color: var(--text-primary);
+}
+
+.page-investor-referrals .rf-option-row small {
+  font-size: 9px;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
+.page-investor-referrals .rf-option-row b {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.page-investor-referrals .rf-option-row.is-active {
+  border-color: var(--accent);
+  background: var(--rf-accent-soft);
+  box-shadow: inset 0 0 0 1px var(--accent-border);
+}
+
+.page-investor-referrals .rf-option-row.is-active svg {
+  color: var(--accent);
+}
+
+.page-investor-referrals .rf-message-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  font-size: 10.5px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.page-investor-referrals .rf-message-preview p {
+  margin: 0;
+}
+
+.page-investor-referrals .rf-message-preview b {
+  color: var(--accent);
+}
+
+.page-investor-referrals .rf-code-big {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px;
+  border: 1px dashed var(--accent-border);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+}
+
+.page-investor-referrals .rf-code-big span {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.page-investor-referrals .rf-rule-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  counter-reset: rule;
+}
+
+.page-investor-referrals .rf-rule-list li {
+  display: grid;
+  grid-template-columns: 54px minmax(0, 1fr);
+  gap: 9px;
+  align-items: start;
+  padding: 8px 10px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+}
+
+.page-investor-referrals .rf-rule-list li > b {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.page-investor-referrals .rf-rule-list li > span {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.page-investor-referrals .rf-rule-list strong {
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.page-investor-referrals .rf-rule-list small {
+  font-size: 9.5px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.page-investor-referrals .rf-note-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.page-investor-referrals .rf-note-list li {
+  display: grid;
+  grid-template-columns: 16px minmax(0, 1fr);
+  gap: 7px;
+  align-items: start;
+  font-size: 10px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.page-investor-referrals .rf-note-list svg {
+  margin-top: 2px;
+  color: var(--accent);
+}
+
+.page-investor-referrals .rf-note-list b {
+  color: var(--text-primary);
+}
+
+.page-investor-referrals .rf-note-list code {
+  padding: 0 3px;
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  background: var(--surface-sunken);
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+}
+
+.page-investor-referrals .rf-check {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.page-investor-referrals .rf-check input {
+  accent-color: var(--accent);
+}
+
+.page-investor-referrals .rf-ack {
+  flex: 1 1 100%;
+  max-width: none;
+  padding: 6px 8px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+}
+
+.page-investor-referrals .rf-stage-line {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.page-investor-referrals .rf-stage-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  border: 1px solid var(--border-strong);
+  background: var(--surface);
+}
+
+.page-investor-referrals .rf-stage-dot.is-done {
+  border-color: var(--win);
+  background: var(--win);
+}
+
+.page-investor-referrals .rf-stage-line small {
+  margin-left: 4px;
+}
+
+.page-investor-referrals .rf-referee {
+  display: grid;
+  grid-template-columns: 38px minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+}
+
+.page-investor-referrals .rf-referee__avatar {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--accent-border);
+  background: var(--rf-accent-soft);
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.page-investor-referrals .rf-referee > div {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.page-investor-referrals .rf-referee strong {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.page-investor-referrals .rf-referee b {
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.page-investor-referrals .rf-sent-list {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.page-investor-referrals .rf-sent {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 9px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+}
+
+.page-investor-referrals .rf-sent__icon {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--text-secondary);
+}
+
+.page-investor-referrals .rf-sent__body {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.page-investor-referrals .rf-sent__body strong {
+  font-size: 10.5px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.page-investor-referrals .rf-tier-table {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.page-investor-referrals .rf-tier-row {
+  display: grid;
+  grid-template-columns: 68px 56px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--surface);
+  font-size: 10.5px;
+}
+
+.page-investor-referrals .rf-tier-row:last-child {
+  border-bottom: 0;
+}
+
+.page-investor-referrals .rf-tier-row b {
+  font-weight: 700;
+}
+
+.page-investor-referrals .rf-tier-row.is-reached {
+  background: var(--rf-ok-soft);
+}
+
+.page-investor-referrals .rf-tier-row.is-next {
+  background: var(--rf-accent-soft);
+}
+
+.page-investor-referrals .rf-checkin {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border: 1px solid var(--accent-border);
+  border-radius: var(--radius-md);
+  background: var(--rf-accent-soft);
+}
+
+.page-investor-referrals .rf-checkin__number {
+  display: grid;
+  place-items: center;
+  width: 52px;
+  height: 52px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--accent-border);
+  background: var(--surface);
+  color: var(--accent);
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.page-investor-referrals .rf-checkin > div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.page-investor-referrals .rf-checkin strong {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.page-investor-referrals .rf-export-preview,
+.page-investor-referrals .rf-invite-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 9px 10px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  font-size: 10px;
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+.page-investor-referrals .rf-export-preview p,
+.page-investor-referrals .rf-invite-preview p {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.page-investor-referrals .rf-reward-head {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 9px;
+  padding: 9px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-2);
+}
+
+.page-investor-referrals .rf-reward-head > div {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.page-investor-referrals .rf-reward-head strong {
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.page-investor-referrals .rf-credit-summary {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 6px;
+}
+
+.page-investor-referrals .rf-credit-summary > div {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 8px 9px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+}
+
+.page-investor-referrals .rf-credit-summary b {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.page-investor-referrals .rf-campaign-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.page-investor-referrals .rf-campaign {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 9px 10px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+}
+
+.page-investor-referrals .rf-campaign header {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.page-investor-referrals .rf-campaign header strong {
+  font-size: 11.5px;
+  font-weight: 700;
+}
+
+.page-investor-referrals .rf-campaign header b {
+  margin-left: auto;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.page-investor-referrals .rf-campaign p {
+  margin: 0;
+  font-size: 10px;
+  line-height: 1.55;
+  color: var(--text-secondary);
+}
+
+.page-investor-referrals .rf-campaign__meta {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+}
+
+.page-investor-referrals .rf-campaign footer {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.page-investor-referrals .rf-campaign.is-ended {
+  opacity: 0.72;
+}
+
+.page-investor-referrals .rf-campaign.is-joined {
+  border-color: var(--accent-border);
+}
+
+.page-investor-referrals .rf-goal-form {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 8px;
+}
+
+/* ═══ animations ═══ */
+
+@keyframes rf-rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes rf-fade-step {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes rf-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes rf-drawer-in {
+  from {
+    opacity: 0;
+    transform: translateX(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes rf-draw {
+  from {
+    stroke-dashoffset: 26;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes rf-check-in {
+  0% {
+    transform: scale(0.7);
+  }
+  60% {
+    transform: scale(1.12);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes rf-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.12);
+    opacity: 0.86;
+  }
+}
+
+@keyframes rf-rank-slide {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ═══ responsive ═══ */
+
+@media (max-width: 1279px) {
+  .page-investor-referrals .rf-hero {
+    grid-template-columns: minmax(0, 1fr) 280px;
+  }
+
+  .page-investor-referrals .rf-hero__figures {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .page-investor-referrals .rf-program,
+  .page-investor-referrals .rf-streak,
+  .page-investor-referrals .rf-rewards,
+  .page-investor-referrals .rf-board,
+  .page-investor-referrals .rf-history {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .page-investor-referrals .rf-rewards__side,
+  .page-investor-referrals .rf-history__side {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+
+  .page-investor-referrals .rf-board__you {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 10px;
+    align-items: start;
+  }
+
+  .page-investor-referrals .rf-board__you > .rf-panel-label,
+  .page-investor-referrals .rf-board__you > .rf-drawer-actions {
+    grid-column: 1 / -1;
+  }
+
+  .page-investor-referrals .rf-board__you > .rf-note {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 991px) {
+  .page-investor-referrals .rf-hero {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .page-investor-referrals .rf-hero__side {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border-left: 0;
+    border-top: 1px solid var(--border-subtle);
+    padding-left: 0;
+    padding-top: 12px;
+  }
+
+  .page-investor-referrals .rf-code-card {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .page-investor-referrals .rf-code-card__side {
+    border-left: 0;
+    border-top: 1px solid var(--border-subtle);
+    padding-left: 0;
+    padding-top: 10px;
+  }
+
+  .page-investor-referrals .rf-share-row {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .page-investor-referrals .rf-stat-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .page-investor-referrals .rf-earned {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .page-investor-referrals .rf-option-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  /* leaderboard: stacked cards below md */
+  .page-investor-referrals .rf-table-wrap,
+  .page-investor-referrals .rf-history__table {
+    border: 0;
+    background: none;
+    overflow: visible;
+  }
+
+  .page-investor-referrals .rf-board__table .rf-table {
+    min-width: 0;
+  }
+
+  .page-investor-referrals .rf-board__table .rf-table thead,
+  .page-investor-referrals .rf-history__table .rf-table thead {
+    display: none;
+  }
+
+  .page-investor-referrals .rf-board__table .rf-table,
+  .page-investor-referrals .rf-board__table .rf-table tbody,
+  .page-investor-referrals .rf-history__table .rf-table,
+  .page-investor-referrals .rf-history__table .rf-table tbody {
+    display: block;
+    min-width: 0;
+  }
+
+  .page-investor-referrals .rf-board__table .rf-table tbody tr,
+  .page-investor-referrals .rf-history__table .rf-table tbody tr {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 2px 10px;
+    margin-bottom: 6px;
+    padding: 8px 10px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    background: var(--surface);
+  }
+
+  .page-investor-referrals .rf-board__table .rf-table tbody td,
+  .page-investor-referrals .rf-history__table .rf-table tbody td {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 2px 0;
+    border: 0;
+    text-align: right;
+  }
+
+  .page-investor-referrals .rf-board__table .rf-table tbody td::before,
+  .page-investor-referrals .rf-history__table .rf-table tbody td::before {
+    content: attr(data-label);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .page-investor-referrals .rf-table__action {
+    text-align: right;
+  }
+
+  .page-investor-referrals .rf-history__table .rf-table tbody tr td:nth-child(2),
+  .page-investor-referrals .rf-history__table .rf-table tbody tr td:nth-child(6) {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 767px) {
+  .page-investor-referrals .rf-rewards__side,
+  .page-investor-referrals .rf-history__side,
+  .page-investor-referrals .rf-board__you {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .page-investor-referrals .rf-reward-grid,
+  .page-investor-referrals .rf-invite-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .page-investor-referrals .rf-share-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .page-investor-referrals .rf-hero__figures {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .page-investor-referrals .rf-hero__side {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .page-investor-referrals .rf-stat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .page-investor-referrals .rf-week,
+  .page-investor-referrals .rf-week.is-wide {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .page-investor-referrals .rf-tier-strip {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .page-investor-referrals .rf-section-head {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .page-investor-referrals .rf-card,
+  .page-investor-referrals .rf-board__you {
+    min-width: 0;
+  }
+
+  .page-investor-referrals .rf-goal-form,
+  .page-investor-referrals .rf-credit-summary {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .page-investor-referrals .rf-tier-row {
+    grid-template-columns: 62px 46px minmax(0, 1fr);
+  }
+
+  .page-investor-referrals .rf-tier-row > .rf-tag {
+    grid-column: 1 / -1;
+    justify-self: start;
+  }
+
+  .page-investor-referrals .rf-funnel__row {
+    grid-template-columns: 70px minmax(0, 1fr) 18px 30px;
+  }
+
+  .page-investor-referrals .rf-referee {
+    grid-template-columns: 34px minmax(0, 1fr) auto;
+  }
+
+  .page-investor-referrals .rf-referee > b {
+    grid-column: 2 / -1;
+  }
+
+  .page-investor-referrals .rf-drawer {
+    width: 100vw;
+  }
+
+  .page-investor-referrals .rf-modal-layer .desk-modal {
+    max-width: calc(100vw - 20px);
+  }
+}
+
+@media (max-width: 575px) {
+  .page-investor-referrals .rf-hero {
+    padding: 12px;
+  }
+
+  .page-investor-referrals .rf-hero h1 {
+    font-size: 22px;
+  }
+
+  .page-investor-referrals .rf-hero__figures {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .page-investor-referrals .rf-code {
+    font-size: 18px;
+    letter-spacing: 1.2px;
+  }
+
+  .page-investor-referrals .rf-share-row {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .page-investor-referrals .rf-week,
+  .page-investor-referrals .rf-week.is-wide,
+  .page-investor-referrals .rf-week.is-compact {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .page-investor-referrals .rf-streak__number b {
+    font-size: 36px;
+  }
+
+  .page-investor-referrals .rf-option-grid,
+  .page-investor-referrals .rf-option-grid.is-two {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .page-investor-referrals .rf-invite {
+    grid-template-columns: 26px minmax(0, 1fr);
+  }
+
+  .page-investor-referrals .rf-invite__right {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .page-investor-referrals .rf-funnel__row {
+    grid-template-columns: 62px minmax(0, 1fr) 16px;
+  }
+
+  .page-investor-referrals .rf-funnel__row small {
+    display: none;
+  }
+
+  .page-investor-referrals .rf-kv > div {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1px;
+  }
+
+  .page-investor-referrals .rf-shortcuts {
+    gap: 4px;
+  }
+
+  .page-investor-referrals .rf-shortcuts button {
+    font-size: 9.5px;
+    padding: 4px 7px;
+  }
+
+  .page-investor-referrals .rf-modal-layer .desk-modal {
+    max-width: 100vw;
+  }
+
+  .page-investor-referrals .rf-share-btn {
+    justify-content: flex-start;
+    padding: 7px 10px;
+  }
+}
+
+/* ═══ dark-mode details ═══ */
+
+[data-bs-theme="dark"] .page-investor-referrals .rf-tag.is-win,
+[data-bs-theme="dark"] .page-investor-referrals .rf-tag.is-qualified,
+[data-bs-theme="dark"] .page-investor-referrals .rf-day.is-done,
+[data-bs-theme="dark"] .page-investor-referrals .rf-tier.is-reached,
+[data-bs-theme="dark"] .page-investor-referrals .rf-pip.is-done {
+  border-color: #1f4a41;
+}
+
+[data-bs-theme="dark"] .page-investor-referrals .rf-tag.is-wait,
+[data-bs-theme="dark"] .page-investor-referrals .rf-tag.is-pending,
+[data-bs-theme="dark"] .page-investor-referrals .rf-error {
+  border-color: #4a3721;
+}
+
+[data-bs-theme="dark"] .page-investor-referrals .rf-tag.is-loss,
+[data-bs-theme="dark"] .page-investor-referrals .rf-tag.is-lapsed,
+[data-bs-theme="dark"] .page-investor-referrals .rf-day.is-missed {
+  border-color: #4a2723;
+}
+
+[data-bs-theme="dark"] .page-investor-referrals .rf-table tbody tr.is-podium td {
+  background: rgb(227 185 107 / 8%);
+}
+
+[data-bs-theme="dark"] .page-investor-referrals .rf-drawer-layer {
+  background: rgb(0 0 0 / 52%);
+}
+
+/* ═══ reduced motion ═══ */
+
+@media (prefers-reduced-motion: reduce) {
+  .page-investor-referrals .rf-figure,
+  .page-investor-referrals .rf-rung,
+  .page-investor-referrals .rf-invite,
+  .page-investor-referrals .rf-reward,
+  .page-investor-referrals .rf-day,
+  .page-investor-referrals .rf-pip,
+  .page-investor-referrals .rf-delta,
+  .page-investor-referrals .rf-table tbody tr,
+  .page-investor-referrals .rf-streak__number b,
+  .page-investor-referrals .rf-code.is-copied .rf-code__icon svg,
+  .page-investor-referrals .rf-claim svg,
+  .page-investor-referrals .rf-drawer,
+  .page-investor-referrals .rf-drawer-layer {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .page-investor-referrals .rf-reward:hover,
+  .page-investor-referrals .rf-code:hover,
+  .page-investor-referrals .rf-btn:hover:not(:disabled) {
+    transform: none;
+  }
+}
