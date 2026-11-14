@@ -10,13 +10,13 @@ export const dynamic = "force-dynamic";
  * Structured payload for Page H-3 (Pricing & Investment Tiers).
  */
 export async function GET() {
-  const { content, usedFallback } = await getPricingContent();
+  const { content } = await getPricingContent();
 
   const body: ApiEnvelope<PricingContentDTO> = {
     data: content,
     meta: {
       ...content.meta,
-      source: usedFallback ? "fallback" : "database",
+      source: content.meta.source,
       requestId: `pricing_${Date.now().toString(36)}`,
     },
   };

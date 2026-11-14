@@ -20,7 +20,7 @@ export async function POST(request: Request) {
     const body: ApiEnvelope<WaitlistSignupResponseDTO> = {
       data: result,
       meta: {
-        source: "database",
+        source: "mock",
         generatedAt: new Date().toISOString(),
         version: 1,
         requestId: `waitlist_${Date.now().toString(36)}`,

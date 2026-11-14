@@ -13,7 +13,7 @@ Implemented Pages:
 | UI Framework   | Next.js 16 App Router (React 19)                                                                                       |
 | Theme & Style  | **Light Mode Default** (`data-bs-theme="light"`), **Bootstrap 5.3.8** + design tokens + **page-scoped leak-proof CSS** |
 | Data Layer     | **TanStack Query v5** (`QueryClientProvider` in `src/app/providers.tsx`)                                               |
-| Database & ORM | PostgreSQL + Drizzle ORM (schema in `src/db/schema.ts`, lazy seed + bundled fallback)                                  |
+| Demo data       | Bundled fixtures + process-local in-memory mock store; no database server or `DATABASE_URL` is needed for frontend development |
 
 ## CSS Architecture (Page-Scoped & Leak-Proof)
 
@@ -56,7 +56,7 @@ src/styles/pages/pricing.css   ← Scoped strictly under .page-pricing
 - `features_sections`, `feature_modules`, `feature_matrix_rows`
 - `pricing_sections`, `pricing_tiers`, `pool_asset_classes`, `pricing_faqs`
 
-All tables are seeded automatically and lazily on first access, with graceful fallback to bundled static data if the database is resetting.
+Landing, Features, and Pricing use the bundled fixtures in `src/lib/content/` as their mock data source. Waitlist submissions are kept in an in-memory store for the lifetime of the running development server; restarting the server clears them. The PostgreSQL schema remains in `src/db/schema.ts` for a future backend integration, but the frontend demo does not connect to it.
 
 ---
 

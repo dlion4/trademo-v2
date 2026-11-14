@@ -20,7 +20,7 @@ export function LiveTickerStrip({ initialQuotes }: LiveTickerStripProps) {
   const seed = initialQuotes?.length
     ? {
         quotes: initialQuotes,
-        meta: { source: "database" as const, generatedAt: new Date(0).toISOString(), version: 1 },
+        meta: { source: "mock" as const, generatedAt: new Date(0).toISOString(), version: 1 },
       }
     : undefined;
 

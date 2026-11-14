@@ -11,13 +11,13 @@ export const dynamic = "force-dynamic";
  * frontend is switched to a remote backend.
  */
 export async function GET() {
-  const { content, usedFallback } = await getLandingContent();
+  const { content } = await getLandingContent();
 
   const body: ApiEnvelope<LandingContentDTO> = {
     data: content,
     meta: {
       ...content.meta,
-      source: usedFallback ? "fallback" : "database",
+      source: content.meta.source,
       requestId: `landing_${Date.now().toString(36)}`,
     },
   };

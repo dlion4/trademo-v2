@@ -1,7 +1,4 @@
-import { count } from "drizzle-orm";
-
-import { db } from "@/db";
-import { waitlistSignups } from "@/db/schema";
+import { mockDatabase } from "@/db";
 import type { WaitlistSignupRequestDTO, WaitlistSignupResponseDTO } from "@/lib/api/types";
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
@@ -20,23 +17,22 @@ export async function joinWaitlist(
   const role = input.role === "operator" ? "operator" : "investor";
   const source = input.source?.slice(0, 64) || "landing-cta";
 
-  const inserted = await db
-    .insert(waitlistSignups)
-    .values({ email, role, source, note: input.note?.slice(0, 280) })
-    .onConflictDoNothing({ target: waitlistSignups.email })
-    .returning({ id: waitlistSignups.id });
-
-  const [totals] = await db.select({ value: count() }).from(waitlistSignups);
-  const position = Number(totals?.value ?? 1);
+  const { record, inserted } = mockDatabase.waitlist.add({
+    email,
+    role,
+    source,
+    note: input.note?.slice(0, 280),
+  });
+  const position = mockDatabase.waitlist.count();
 
   return {
-    id: inserted[0]?.id ?? "already-registered",
+    id: inserted ? record.id : "already-registered",
     email,
     role,
     position,
     message:
-      inserted.length > 0
-        ? "You're on the list. Watch your inbox for the early-access brief."
-        : "You're already on the list — we'll be in touch shortly.",
+      inserted
+        ? "You're on the demo waitlist. This entry is stored in memory only."
+        : "This email is already on the demo waitlist.",
   };
 }

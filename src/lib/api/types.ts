@@ -6,7 +6,7 @@
  */
 
 export type MarketDirection = "up" | "down" | "flat";
-export type ContentSource = "database" | "fallback";
+export type ContentSource = "database" | "mock" | "fallback";
 
 export interface CtaLinkDTO {
   label: string;

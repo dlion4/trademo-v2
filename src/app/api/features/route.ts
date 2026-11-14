@@ -11,13 +11,13 @@ export const dynamic = "force-dynamic";
  * the frontend swap to a remote backend is transport-only.
  */
 export async function GET() {
-  const { content, usedFallback } = await getFeaturesContent();
+  const { content } = await getFeaturesContent();
 
   const body: ApiEnvelope<FeaturesContentDTO> = {
     data: content,
     meta: {
       ...content.meta,
-      source: usedFallback ? "fallback" : "database",
+      source: content.meta.source,
       requestId: `features_${Date.now().toString(36)}`,
     },
   };

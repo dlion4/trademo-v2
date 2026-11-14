@@ -1,24 +1,47 @@
-import { drizzle } from "drizzle-orm/node-postgres";
-import { Pool } from "pg";
+import { randomUUID } from "node:crypto";
 
-const databaseUrl = process.env.DATABASE_URL;
-
-if (!databaseUrl) {
-  throw new Error("DATABASE_URL is required");
+export interface WaitlistSignupInput {
+  email: string;
+  role: "investor" | "operator";
+  source: string;
+  note?: string;
 }
 
-const globalForDb = globalThis as typeof globalThis & {
-  __arenaNextJsPostgresqlPool?: Pool;
+interface WaitlistSignupRecord extends WaitlistSignupInput {
+  id: string;
+  createdAt: string;
+}
+
+interface MockDatabaseState {
+  waitlistSignups: Map<string, WaitlistSignupRecord>;
+}
+
+type MockDatabaseGlobal = typeof globalThis & {
+  __tradeMoMockDatabase?: MockDatabaseState;
 };
 
-export const pool =
-  globalForDb.__arenaNextJsPostgresqlPool ??
-  new Pool({
-    connectionString: databaseUrl,
-  });
+const globalForMockDb = globalThis as MockDatabaseGlobal;
+const state =
+  globalForMockDb.__tradeMoMockDatabase ??
+  (globalForMockDb.__tradeMoMockDatabase = { waitlistSignups: new Map() });
 
-if (process.env.NODE_ENV !== "production") {
-  globalForDb.__arenaNextJsPostgresqlPool = pool;
-}
+export const mockDatabase = {
+  mode: "mock" as const,
+  waitlist: {
+    add(input: WaitlistSignupInput): { record: WaitlistSignupRecord; inserted: boolean } {
+      const existing = state.waitlistSignups.get(input.email);
+      if (existing) return { record: existing, inserted: false };
 
-export const db = drizzle(pool);
+      const record: WaitlistSignupRecord = {
+        ...input,
+        id: randomUUID(),
+        createdAt: new Date().toISOString(),
+      };
+      state.waitlistSignups.set(input.email, record);
+      return { record, inserted: true };
+    },
+    count(): number {
+      return state.waitlistSignups.size;
+    },
+  },
+};
