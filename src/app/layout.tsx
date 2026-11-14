@@ -1,10 +1,26 @@
 import type { Metadata, Viewport } from "next";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import type { ReactNode } from "react";
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./globals.css";
 
 import { AppProviders } from "./providers";
+
+// Self-hosted via next/font — no render-blocking request to fonts.googleapis.com.
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-inter",
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-jetbrains-mono",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "tradeMO — Crowdfunded Multi-Asset Trading Pools & Investor Profit Sharing",
@@ -33,15 +49,11 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" data-bs-theme="light">
-      <head>
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap"
-        />
-      </head>
+    <html
+      lang="en"
+      data-bs-theme="light"
+      className={`${inter.variable} ${jetbrainsMono.variable}`}
+    >
       <body>
         <AppProviders>{children}</AppProviders>
       </body>

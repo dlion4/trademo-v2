@@ -1,13 +1,16 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 
-import { ResetPasswordPage } from "@/components/auth/password/reset-password-page";
+import { AuthRouteFallback } from "@/components/auth/auth-route-fallback";
+import { ResetPasswordParams } from "@/components/auth/password/reset-password-params";
 
 export const metadata: Metadata = { title: "Reset password · tradeMO" };
 
-type SearchParams = Promise<Record<string, string | string[] | undefined>>;
-
 /** Page A-5 — Reset Password (/auth/reset-password?token={jwt}) */
-export default async function Page({ searchParams }: { searchParams: SearchParams }) {
-  const p = await searchParams;
-  return <ResetPasswordPage token={typeof p.token === "string" ? p.token : ""} />;
+export default function Page() {
+  return (
+    <Suspense fallback={<AuthRouteFallback />}>
+      <ResetPasswordParams />
+    </Suspense>
+  );
 }

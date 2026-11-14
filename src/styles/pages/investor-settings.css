@@ -4,11 +4,16 @@
    rules, restrained teal accent, monospaced numerics.
    ═══════════════════════════════════════════════════════════════════════ */
 
-.page-investor-settings {
+.page-investor-settings .iset-page {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
-  padding-bottom: 3rem;
+  gap: 16px;
+  width: 100%;
+  max-width: 1560px;
+  margin-inline: auto;
+  min-width: 0;
+  color: var(--text-primary);
+  font-size: 12px;
 }
 
 /* ── Header Banner ── */

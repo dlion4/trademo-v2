@@ -3,7 +3,6 @@
 import { useMemo, useState } from "react";
 import { Icon } from "@/components/icons";
 import { InvestorShell } from "./investor-shell";
-import "@/styles/pages/investor-settings.css";
 import {
   INITIAL_ALERT_RULES,
   INITIAL_BENEFICIARIES,
@@ -122,7 +121,7 @@ export function InvestorSettingsPage() {
       }}
       onOpenNotifications={() => setSection("notifications")}
     >
-      <div className="page-investor-settings">
+      <div className="iset-page">
         {/* ── Header Banner ── */}
         <div className="iset-header">
           <div className="iset-header-left">
