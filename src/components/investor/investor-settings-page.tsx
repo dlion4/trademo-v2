@@ -122,7 +122,7 @@ export function InvestorSettingsPage() {
       }}
       onOpenNotifications={() => setSection("notifications")}
     >
-      <div className="page-investor-settings">
+      <div className="iset-root">
         {/* ── Header Banner ── */}
         <div className="iset-header">
           <div className="iset-header-left">

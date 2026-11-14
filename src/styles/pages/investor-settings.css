@@ -4,7 +4,7 @@
    rules, restrained teal accent, monospaced numerics.
    ═══════════════════════════════════════════════════════════════════════ */
 
-.page-investor-settings {
+.iset-root {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
