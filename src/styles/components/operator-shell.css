@@ -57,9 +57,16 @@
 .op-shell.is-rail .op-nav-group__label,
 .op-shell.is-rail .op-nav-link__text,
 .op-shell.is-rail .op-nav-badge,
+.op-shell.is-rail .op-deriv-card,
 .op-shell.is-rail .op-deriv-card__meta,
+.op-shell.is-rail .iv-user-card > div,
+.op-shell.is-rail .iv-book-card,
 .op-shell.is-rail .op-foot-link span {
   display: none;
+}
+
+.op-shell.is-rail .op-sidebar {
+  overflow-x: hidden;
 }
 
 .op-sidebar__nav {
