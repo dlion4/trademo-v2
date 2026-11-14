@@ -99,9 +99,9 @@
   --shadow-glow: var(--shadow-lift);
 
   /* ── Type ── */
-  --font-sans: "Inter", -apple-system, "Segoe UI", system-ui, sans-serif;
-  --font-display: "Inter", -apple-system, "Segoe UI", system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --font-sans: var(--font-inter), -apple-system, "Segoe UI", system-ui, sans-serif;
+  --font-display: var(--font-inter), -apple-system, "Segoe UI", system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, "SFMono-Regular", Menlo, monospace;
 
   /* ── Bootstrap 5.3 bridge ── */
   --bs-body-bg: #ffffff;

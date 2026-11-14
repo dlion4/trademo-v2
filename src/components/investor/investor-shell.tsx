@@ -180,7 +180,13 @@ const NAV: {
         href: "/investor/referrals",
         code: "I-10",
       },
-      { key: "settings", label: "Investor settings", icon: "sliders" },
+      {
+        key: "settings",
+        label: "Investor settings",
+        icon: "sliders",
+        href: "/investor/settings",
+        code: "I-12",
+      },
     ],
   },
 ];
