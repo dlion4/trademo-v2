@@ -358,3 +358,54 @@ hr {
     stroke-dashoffset: 0;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   Unified Investor Pages (I-1 to I-12) Typography, Cards & Spacing
+   Matches H-1 to H-4 legibility: uniform sans/mono fonts, slightly larger
+   readable body text, smooth rounded card borders, and balanced padding.
+   ═══════════════════════════════════════════════════════════════════════ */
+[class*="page-investor-"] {
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+}
+
+[class*="page-investor-"] h1 {
+  font-family: var(--font-sans);
+  font-size: 1.5rem;
+  line-height: 1.28;
+  letter-spacing: -0.015em;
+}
+
+[class*="page-investor-"] h2 {
+  font-family: var(--font-sans);
+  font-size: 1.125rem;
+  line-height: 1.35;
+}
+
+[class*="page-investor-"] h3 {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+[class*="page-investor-"] p,
+[class*="page-investor-"] li,
+[class*="page-investor-"] td,
+[class*="page-investor-"] th {
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+[class*="page-investor-"] .card,
+[class*="page-investor-"] [class*="-card"],
+[class*="page-investor-"] .iset-card,
+[class*="page-investor-"] .iset-header {
+  border-radius: var(--radius-lg, 14px);
+  padding: 1.375rem 1.5rem;
+}
+
+[class*="page-investor-"] section + section {
+  margin-top: 1.25rem;
+}
+
